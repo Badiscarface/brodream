@@ -1,0 +1,100 @@
+{
+    "success": true,
+    "products": [
+        {
+            "_id": "668ad1928da0594614a1ef58",
+            "name": "Gucci White Oversize T-Shirt",
+            "slug": "gucci-white-oversize-tshirt",
+            "priceSale": 98,
+            "image": {
+                "url": "https://res.cloudinary.com/dcuwtg4h1/image/upload/v1720373848/lg_Do0unp0pziV9Nm5uhATiDNU8mmkk4KiYap65pVl2_fmlslu_qroum7_1_usffpf.webp"
+            }
+        },
+        {
+            "_id": "669546df2cdfa8b784843c70",
+            "name": "IPhone 11",
+            "slug": "iphone-11",
+            "category": "Mobile",
+            "priceSale": 395,
+            "image": {
+                "url": "https://res.cloudinary.com/dcuwtg4h1/image/upload/v1721059020/iphone-11-965232_zkxiio_ngtrxe_ss4sqs.webp"
+            }
+        },
+        {
+            "_id": "66978d16edfa9f6f81514fe4",
+            "name": "JUBILEE X NBA",
+            "slug": "jubilee-x-nba",
+            "priceSale": 140,
+            "image": {
+                "url": "https://res.cloudinary.com/dcuwtg4h1/image/upload/v1721208062/ProductPhotoTemplate_Web_0005_ColorFill1copy4_na1my6.webp"
+            }
+        },
+        {
+            "_id": "66978b01f263b02c3ce903e6",
+            "name": "LV Clash Square Sunglasses",
+            "slug": "lv-clash-square-sunglasses",
+            "priceSale": 118,
+            "image": {
+                "url": "https://res.cloudinary.com/dcuwtg4h1/image/upload/v1721207505/louis-vuitton-lv-clash-square-sunglasses-s00-sunglasses--Z1579W_PM2_Front_view_rvscoy.webp"
+            }
+        },
+        {
+            "_id": "6695fcb7476b819af72966d9",
+            "name": "LV Trainer Sneaker",
+            "slug": "lv-trainer-sneaker",
+            "category": "Shoes",
+            "priceSale": 247,
+            "image": {
+                "url": "https://res.cloudinary.com/dcuwtg4h1/image/upload/v1721105274/louis-vuitton--BP9U6PGC26_PM2_Front_view_dtxifa.avif"
+            }
+        },
+        {
+            "_id": "66954e7783acccdc006e4de7",
+            "name": "Los Angeles Lakers 'Camel Black White' 9FORTY K-Frame Snapback",
+            "slug": "los-angeles-lakers-camel-black-white-9forty-kframe-snapback",
+            "category": "Caps",
+            "priceSale": 22,
+            "image": {
+                "url": "https://res.cloudinary.com/dcuwtg4h1/image/upload/v1721060945/196313860964_default_0010_qj5akc.avif"
+            }
+        },
+        {
+            "_id": "6697862fe4029521b32e0681",
+            "name": "Men's Tiro 21 Track Pant",
+            "slug": "mens-tiro-21-track-pant",
+            "priceSale": 48,
+            "image": {
+                "url": "https://res.cloudinary.com/dcuwtg4h1/image/upload/v1721206275/HN8058___1_jpg_png_jpg_bdaebef5-28c3-41f2-b6ec-0298b3b28f0c_edu5ui.webp"
+            }
+        },
+        {
+            "_id": "66978913a0dd17342cf7745d",
+            "name": "NBA LOS ANGELES LAKERS OLD ENGLISH MEN'S SWEATPANT",
+            "slug": "nba-los-angeles-lakers-old-english-mens-sweatpant",
+            "priceSale": 58,
+            "image": {
+                "url": "https://res.cloudinary.com/dcuwtg4h1/image/upload/v1721207000/BLL4515750-YEL_2_bpt1rq.webp"
+            }
+        },
+        {
+            "_id": "6695fec821467e74c3a7dc17",
+            "name": "NIKE AIR JORDAN 4 RETRO \"RED METALLIC\" SNEAKER",
+            "slug": "nike-air-jordan-4-retro-red-metallic-sneaker",
+            "category": "Shoes",
+            "priceSale": 257,
+            "image": {
+                "url": "https://res.cloudinary.com/dcuwtg4h1/image/upload/v1721106056/air-jordan-4-red-metallic-release-date_oq3c0n.webp"
+            }
+        },
+        {
+            "_id": "6695490087c3a387a524d4a2",
+            "name": "Puma Unisex Metal Cat Cap",
+            "slug": "puma-unisex-metal-cat-cap",
+            "category": "Caps",
+            "priceSale": 19,
+            "image": {
+                "url": "https://res.cloudinary.com/dcuwtg4h1/image/upload/v1721059514/xJoX84ssC1xdC0VNqLtr06kDJwiGNFUm_v0dur9.jpg"
+            }
+        }
+    ]
+}

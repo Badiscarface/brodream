@@ -1,0 +1,85 @@
+{
+    "success": true,
+    "data": {
+        "_id": "66978913a0dd17342cf7745d",
+        "name": "NBA LOS ANGELES LAKERS OLD ENGLISH MEN'S SWEATPANT",
+        "code": "32648763",
+        "status": "new",
+        "isFeatured": true,
+        "brand": "6694aef5c71c3b718e0cf02e",
+        "likes": 3,
+        "description": "Athletic competition dates back. The Old English Capsule features the Renaissance-esque typeface alongside team emblems. Display your loyalty, feel like fan royalty, and conquer the day's look.\n\nThe Pro Standard sweatpants is cozy and stylish and will take your athleisure look to the next level. Made from brushed cotton fleece, these sweatpants are super soft and comfortable. They feature two hand pockets, a drawstring waistband, and elastic ankle cuffs make these pants a solid choice for those comfy days. The evelated team logos make this a must-have piece in your wardrobe.\n\n•Features officially licensed team, and league logos\n•A comfortable and relaxed feel\n•Drawstring Waistband\n•Two front slit pockets\n•Imported",
+        "metaTitle": "NBA LOS ANGELES LAKERS OLD ENGLISH MEN'S SWEATPANT",
+        "metaDescription": "Athletic competition dates back. The Old English Capsule features the Renaissance-esque typeface alongside team emblems. Display your loyalty, feel like fan royalty, and conquer the day's look.\n\nThe Pro Standard sweatpants is cozy and stylish and will take your athleisure look to the next level. Made from brushed cotton fleece, these sweatpants are super soft and comfortable. They feature two hand pockets, a drawstring waistband, and elastic ankle cuffs make these pants a solid choice for those comfy days. The evelated team logos make this a must-have piece in your wardrobe.\n\n•Features officially licensed team, and league logos\n•A comfortable and relaxed feel\n•Drawstring Waistband\n•Two front slit pockets\n•Imported",
+        "slug": "nba-los-angeles-lakers-old-english-mens-sweatpant",
+        "category": "6694db176f766d8706107b64",
+        "subCategory": "669542ccdfb1560d498d396e",
+        "gender": "men",
+        "tags": [
+            "lakers",
+            "track pant"
+        ],
+        "sku": "classic-track-pants-white",
+        "price": 60,
+        "priceSale": 58,
+        "available": 58,
+        "sold": 32,
+        "reviews": [],
+        "reviewsSummery":[
+            {
+              "_id": 5,
+              "count": 1
+            },
+            {
+              "_id": 3,
+              "count": 1
+            },
+            {
+              "_id": 4,
+              "count": 1
+            }
+          ],
+        "shop": {
+            "_id": "6694c7fee3910dc7095f4edf",
+            "title": "Luxury Emporium"
+        },
+        "images": [
+            {
+                "_id": "BLL4515750-YEL_2_bpt1rq",
+                "url": "https://res.cloudinary.com/dcuwtg4h1/image/upload/v1721207000/BLL4515750-YEL_2_bpt1rq.webp"
+            },
+            {
+                "_id": "BLL4515750-BLK_2_d275cw",
+                "url": "https://res.cloudinary.com/dcuwtg4h1/image/upload/v1721207038/BLL4515750-BLK_2_d275cw.webp"
+            }
+        ],
+        "colors": [
+            "yellow",
+            "black"
+        ],
+        "sizes": [
+            "sm",
+            "md",
+            "lg"
+        ],
+        "createdAt": "2024-07-17T09:04:19.981Z",
+        "updatedAt": "2024-11-12T10:40:47.387Z",
+        "__v": 0
+    },
+    "totalReviews": 0,
+    "totalRating": 0,
+    "brand": {
+        "_id": "6694aef5c71c3b718e0cf02e",
+        "name": "Lakers"
+    },
+    "category": {
+        "_id": "669542ccdfb1560d498d396e",
+        "name": "Trousers ",
+        "slug": "trousers-"
+    },
+    "subcategory": {
+        "_id": "669542ccdfb1560d498d396e",
+        "name": "Trousers ",
+        "slug": "trousers-"
+    }
+}
