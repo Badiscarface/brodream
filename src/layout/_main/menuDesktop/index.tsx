@@ -1,21 +1,21 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
-import NextLink from 'next/link';
-import { useRouter } from 'next-nprogress-bar';
+import React from "react";
+import PropTypes from "prop-types";
+import { useState, useEffect } from "react";
+import NextLink from "next/link";
+import { useRouter } from "next-nprogress-bar";
 
 // material
-import typography from '@/theme/typography';
-import { Popover, Stack, Typography } from '@mui/material';
+import typography from "@/theme/typography";
+import { Popover, Stack, Typography } from "@mui/material";
 
 // icons
-import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
-import { MdOutlineKeyboardArrowUp } from 'react-icons/md';
+import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+import { MdOutlineKeyboardArrowUp } from "react-icons/md";
 
 // components
-import MenuDesktopPopover from '@/components/popover/menuDesktop';
-import { usePathname } from 'next/navigation';
-import Link from 'next/link';
+import MenuDesktopPopover from "@/components/popover/menuDesktop";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 // // api
 // import { useQuery } from 'react-query';
@@ -64,48 +64,49 @@ function MenuDesktopItem({ ...props }) {
     setAnchorEl(null);
   };
   const open = Boolean(anchorEl);
-  const id = open ? 'simple-popover' : undefined;
+  const id = open ? "simple-popover" : undefined;
   if (isDropdown) {
     return (
       <>
         <Typography
           ref={anchorRef}
-          className={` ${isOffset && isHome && 'offset'}`}
-          id='composition-button'
-          aria-controls={isOpen ? 'composition-menu' : undefined}
-          aria-expanded={isOpen ? 'true' : undefined}
-          aria-haspopup='true'
+          className={` ${isOffset && isHome && "offset"}`}
+          id="composition-button"
+          aria-controls={isOpen ? "composition-menu" : undefined}
+          aria-expanded={isOpen ? "true" : undefined}
+          aria-haspopup="true"
           onClick={onOpen}
           sx={{
             ...typography.subtitle2,
-            color: 'primary.main',
-            textTransform: 'uppercase',
-            textDecoration: 'none',
+            color: "text.primary",
+            textTransform: "capitalize",
+            textDecoration: "none",
             fontWeight: 600,
-            transition: '.2s ease-in',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            '&:hover': {
-              color: 'primary.light',
-              textDecoration: 'none',
+            transition: ".2s ease-in",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            "&:hover": {
+              color: "primary.main",
+              textDecoration: "none",
             },
-            '&.offset': {
-              color: 'primary.main',
+            "&.offset": {
+              color: "primary.main",
             },
-            '&.active': {
-              color: 'primary.light',
+            "&.active": {
+              color: "primary.main",
             },
-            '& .link-icon': {
+            "& .link-icon": {
               ml: 0.5,
               fontSize: 16,
             },
-          }}>
+          }}
+        >
           {title}
           {isOpen ? (
-            <MdOutlineKeyboardArrowUp className='link-icon' />
+            <MdOutlineKeyboardArrowUp className="link-icon" />
           ) : (
-            <MdOutlineKeyboardArrowDown className='link-icon' />
+            <MdOutlineKeyboardArrowDown className="link-icon" />
           )}
         </Typography>
         <MenuDesktopPopover
@@ -122,42 +123,43 @@ function MenuDesktopItem({ ...props }) {
       <>
         <Typography
           ref={anchorRef}
-          className={` ${isOffset && isHome && 'offset'}`}
-          id='composition-button'
-          aria-controls={open ? 'composition-menu' : undefined}
-          aria-expanded={open ? 'true' : undefined}
-          aria-haspopup='true'
+          className={` ${isOffset && isHome && "offset"}`}
+          id="composition-button"
+          aria-controls={open ? "composition-menu" : undefined}
+          aria-expanded={open ? "true" : undefined}
+          aria-haspopup="true"
           onClick={handleClick}
           sx={{
             ...typography.subtitle2,
-            color: 'primary.main',
-            textTransform: 'uppercase',
-            textDecoration: 'none',
+            color: "text.primary",
+            textTransform: "capitalize",
+            textDecoration: "none",
             fontWeight: 600,
-            transition: '.2s ease-in',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            '&:hover': {
-              color: 'primary.light',
-              textDecoration: 'none',
+            transition: ".2s ease-in",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            "&:hover": {
+              color: "primary.main",
+              textDecoration: "none",
             },
-            '&.offset': {
-              color: 'primary.main',
+            "&.offset": {
+              color: "primary.main",
             },
-            '&.active': {
-              color: 'primary.light',
+            "&.active": {
+              color: "primary.main",
             },
-            '& .link-icon': {
+            "& .link-icon": {
               ml: 0.5,
               fontSize: 16,
             },
-          }}>
+          }}
+        >
           {title}
           {open ? (
-            <MdOutlineKeyboardArrowUp className='link-icon' />
+            <MdOutlineKeyboardArrowUp className="link-icon" />
           ) : (
-            <MdOutlineKeyboardArrowDown className='link-icon' />
+            <MdOutlineKeyboardArrowDown className="link-icon" />
           )}
         </Typography>
         <Popover
@@ -166,27 +168,31 @@ function MenuDesktopItem({ ...props }) {
           anchorEl={anchorEl}
           onClose={handleClose}
           anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
-          }}>
+            vertical: "bottom",
+            horizontal: "left",
+          }}
+        >
           <Stack
             spacing={1}
             sx={{
               maxWidth: 250,
               p: 2,
-            }}>
+            }}
+          >
             <Typography
-              variant='body1'
-              color='text.primary'
+              variant="body1"
+              color="text.primary"
               component={Link}
-              href='/broderie'>
+              href="/broderie"
+            >
               Broderie
             </Typography>
             <Typography
-              variant='body1'
-              color='text.primary'
+              variant="body1"
+              color="text.primary"
               component={Link}
-              href='/number-printing'>
+              href="/number-printing"
+            >
               Impression numérique
             </Typography>
           </Stack>
@@ -200,30 +206,31 @@ function MenuDesktopItem({ ...props }) {
       key={title}
       href={path}
       // name={title}
-      className={` ${isActive && 'active'}`}
+      className={` ${isActive && "active"}`}
       sx={{
         ...typography.subtitle2,
-        color: 'primary.main',
-        textTransform: 'uppercase',
-        textDecoration: 'none',
+        color: "text.primary",
+        textTransform: "capitalize",
+        textDecoration: "none",
         fontWeight: 600,
-        transition: '.2s ease-in',
-        cursor: 'pointer',
-        '&:hover': {
-          color: 'primary.light',
-          textDecoration: 'none',
+        transition: ".2s ease-in",
+        cursor: "pointer",
+        "&:hover": {
+          color: "primary.main",
+          textDecoration: "none",
         },
-        '&.offset': {
-          color: 'primary.main',
+        "&.offset": {
+          color: "primary.main",
         },
-        '&.active': {
-          color: 'primary.light',
+        "&.active": {
+          color: "primary.main",
         },
-        '& .link-icon': {
+        "& .link-icon": {
           ml: 0.5,
           fontSize: 16,
         },
-      }}>
+      }}
+    >
       {title}
     </Typography>
   );
@@ -246,9 +253,9 @@ export default function MenuDesktop({ ...props }) {
     function updatePosition() {
       setPosition(window.pageYOffset);
     }
-    window.addEventListener('scroll', updatePosition);
+    window.addEventListener("scroll", updatePosition);
     updatePosition();
-    return () => window.removeEventListener('scroll', updatePosition);
+    return () => window.removeEventListener("scroll", updatePosition);
   }, []);
 
   useEffect(() => {
@@ -270,15 +277,17 @@ export default function MenuDesktop({ ...props }) {
     <>
       <Stack
         spacing={3}
-        direction='row'
-        alignItems='center'
+        direction="row"
+        alignItems="center"
         sx={{
-          display: { xs: 'none', md: 'flex' },
+          display: { xs: "none", md: "flex" },
+          justifyContent: "center",
           width: 1,
           ...(isLeft && {
             ml: 0,
           }),
-        }}>
+        }}
+      >
         {navConfig.map((links: NavConfigProps) => (
           <MenuDesktopItem
             scrollPosition={scrollPosition}
@@ -298,12 +307,13 @@ export default function MenuDesktop({ ...props }) {
       <Stack
         spacing={3}
         sx={{
-          display: { xs: 'felx', md: 'none' },
+          display: { xs: "felx", md: "none" },
           width: 1,
           ...(isLeft && {
             ml: 0,
           }),
-        }}>
+        }}
+      >
         {navConfig.map((links: NavConfigProps) => (
           <MenuDesktopItem
             scrollPosition={scrollPosition}

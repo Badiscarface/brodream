@@ -1,5 +1,5 @@
-'use client';
-import React from 'react';
+"use client";
+import React from "react";
 // /mui
 import {
   Box,
@@ -10,13 +10,13 @@ import {
   Stack,
   Typography,
   Button,
-} from '@mui/material';
+} from "@mui/material";
 // next
-import Image from 'next/image';
+import Image from "next/image";
 // image
 // import TablierImg from '../../../public/images/tablier.jpg';
-import { useRouter } from 'next-nprogress-bar';
-import NoDataFoundIllustration from '@/illustrations/dataNotFound';
+import { useRouter } from "next-nprogress-bar";
+import NoDataFoundIllustration from "@/illustrations/dataNotFound";
 
 export default function ChooseUS({ ...props }) {
   const data = props;
@@ -25,25 +25,26 @@ export default function ChooseUS({ ...props }) {
   return (
     <Box
       sx={{
-        position: 'relative',
+        position: "relative",
         py: 5,
-      }}>
+      }}
+    >
       <Container>
-        <Stack
-          spacing={2}
-          alignItems='center'
-          textAlign='center'
-          mb={5}>
-          <Typography
-            variant='h4'
-            color='text.primary'>
-            Actualités sur la personnalisation textile
-          </Typography>
+        <Stack spacing={2} alignItems="center" textAlign="center" mb={5}>
+          <Stack spacing={2} alignItems="center" textAlign="center" mb={5}>
+            <Typography variant="h2" color="text.primary">
+              Actualités sur la personnalisation textile
+            </Typography>
+            <Typography variant="body1" color="text.secondary">
+              Découvrez ce que nos clients pensent de nos services de
+              personnalisation textile. Leurs avis reflètent la qualité de nos
+              impressions, broderies, et notre engagement à offrir des produits
+              uniques et sur mesure.
+            </Typography>
+          </Stack>
         </Stack>
         {detailData.length > 0 ? (
-          <Grid2
-            container
-            spacing={4}>
+          <Grid2 container spacing={4}>
             {detailData.slice(0, 2).map(
               (item: {
                 title: string;
@@ -53,31 +54,32 @@ export default function ChooseUS({ ...props }) {
                   url: string;
                 };
               }) => (
-                <Grid2
-                  key={Math.random()}
-                  size={{ xs: 12, md: 6 }}>
+                <Grid2 key={Math.random()} size={{ xs: 6, md: 3 }}>
                   <Card
                     sx={{
-                      transition: 'ease-in-out .5s',
-                      ':hover': {
+                      transition: "ease-in-out .5s",
+                      ":hover": {
                         borderColor: (theme) =>
-                          theme.palette.primary.main + '!important',
+                          theme.palette.primary.main + "!important",
                       },
-                    }}>
+                    }}
+                  >
                     <Stack
-                      direction={{ xs: 'column', md: 'row' }}
-                      alignItems='center'
-                      spacing={2}>
+                      // direction={{ xs: "column", md: "row" }}
+                      // alignItems="center"
+                      spacing={2}
+                    >
                       <Box
                         sx={{
-                          position: 'relative',
+                          position: "relative",
                           height: 220,
-                          width: { xs: '100%', md: 220 },
+                          width: { xs: "100%", md: 220 },
                           minWidth: 220,
                           img: {
-                            objectFit: 'cover',
+                            objectFit: "cover",
                           },
-                        }}>
+                        }}
+                      >
                         <Image
                           src={item.cover.url}
                           alt={item.title}
@@ -88,28 +90,31 @@ export default function ChooseUS({ ...props }) {
                       <CardContent
                         sx={{
                           p: 1.5,
-                          pb: '16px !important',
-                        }}>
+                          pb: "16px !important",
+                        }}
+                      >
                         <Stack
                           spacing={2}
-                          alignItems='center'
-                          justifyContent='center'
-                          textAlign='center'>
-                          <Typography variant='subtitle1'>
+                          alignItems="center"
+                          justifyContent="center"
+                          textAlign="center"
+                        >
+                          <Typography variant="subtitle1">
                             {item.title}
                           </Typography>
                           <Typography
-                            variant='body1'
+                            variant="body1"
                             dangerouslySetInnerHTML={{
                               __html: `${item.description.slice(0, 100)}`,
                             }}
                           />
                           <Box>
                             <Button
-                              variant='outlined'
+                              variant="outlined"
                               onClick={() => router.push(`/blogs/${item.slug}`)}
-                              size='small'
-                              color='primary'>
+                              size="small"
+                              color="primary"
+                            >
                               Read More
                             </Button>
                           </Box>

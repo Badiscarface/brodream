@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 // mui
 import {
   Box,
@@ -8,29 +8,30 @@ import {
   Grid2,
   Stack,
   Typography,
-} from '@mui/material';
+  Divider,
+} from "@mui/material";
 // images
-import FranceImg from '../../../public/icons/france.svg';
-import DeliveryImg from '../../../public/icons/delivery.svg';
-import QuantityImg from '../../../public/icons/quantity.svg';
-import BadgeImg from '../../../public/icons/badge.svg';
-import Image from 'next/image';
+import FranceImg from "../../../public/images/france 1.png";
+import DeliveryImg from "../../../public/icons/delivery.svg";
+import QuantityImg from "../../../public/images/quantity.b0a6979e 1.png";
+import BadgeImg from "../../../public/images/image 2.png";
+import Image from "next/image";
 
 const data = [
   {
-    name: 'Brodé et imprimé en France',
+    name: "Brodé et imprimé en France",
     img: FranceImg,
   },
   {
-    name: 'Délais De Production Rapide',
+    name: "Délais De Production Rapide",
     img: DeliveryImg,
   },
   {
-    name: 'Tarifs dégressifs selon la quantité',
+    name: "Tarifs dégressifs selon la quantité",
     img: QuantityImg,
   },
   {
-    name: 'Frais techniques offerts',
+    name: "Frais techniques offerts",
     img: BadgeImg,
   },
 ];
@@ -40,50 +41,60 @@ export default function WhyUs() {
     <Box
       sx={{
         my: { xs: 2, md: 0 },
-      }}>
+      }}
+    >
       <Container>
         <Card
           sx={{
-            bgcolor: 'primary.main',
-          }}>
+            bgcolor: "background.paper",
+          }}
+        >
           <CardContent>
-            <Grid2
-              container
-              spacing={2}>
-              {data.map((item) => (
-                <Grid2
-                  size={{ xs: 6, md: 3 }}
-                  key={Math.random()}>
+            <Stack
+              direction={"row"}
+              alignItems="center"
+              justifyContent="space-between"
+              spacing={1}
+            >
+              {data.map((item, i) => (
+                <React.Fragment key={item.name}>
+                  {" "}
                   <Stack
-                    alignItems='center'
-                    justifyContent='center'
-                    spacing={1}
-                    textAlign='center'>
+                    alignItems="center"
+                    justifyContent="center"
+                    textAlign="center"
+                    gap={2}
+                    sx={{
+                      p: 1,
+                    }}
+                  >
                     <Box
                       sx={{
-                        position: 'relative',
-                        height: 60,
-                        width: 60,
+                        position: "relative",
+                        height: 98,
+                        width: 98,
                         img: {
-                          objectFit: 'cover',
+                          objectFit: "cover",
                         },
-                      }}>
-                      <Image
-                        src={item.img}
-                        alt='Hero Img'
-                        fill
-                        priority
-                      />
+                      }}
+                    >
+                      <Image src={item.img} alt="Hero Img" fill sizes="100%" />
                     </Box>
-                    <Typography
-                      variant='body1'
-                      color='common.white'>
+                    <Typography variant="subtitle1" color="text.primary">
                       {item.name}
                     </Typography>
                   </Stack>
-                </Grid2>
+                  {i === 3 ? null : (
+                    <Divider
+                      variant="middle"
+                      orientation="vertical"
+                      // sx={{ height: 60 }}
+                      flexItem
+                    />
+                  )}
+                </React.Fragment>
               ))}
-            </Grid2>
+            </Stack>
           </CardContent>
         </Card>
       </Container>

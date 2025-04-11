@@ -1,12 +1,12 @@
-import * as React from 'react';
+import * as React from "react";
 // icons
-import { IoSearchOutline } from 'react-icons/io5';
+import { IoSearchOutline } from "react-icons/io5";
 // mui
-import { Dialog, IconButton, Stack, Typography } from '@mui/material';
+import { Dialog, IconButton, Stack, Typography } from "@mui/material";
 // components
-import Search from './search';
+import Search from "./search";
 
-export default function SimpleDialogDemo() {
+export default function SimpleDialogDemo({ ...props }) {
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
     setOpen(true);
@@ -17,48 +17,29 @@ export default function SimpleDialogDemo() {
 
   return (
     <>
-      <Stack
-        direction='row'
-        alignItems='center'
-        justifyContent='space-between'
-        onClick={handleClickOpen}
-        sx={{
-          p: 1,
-          px: 2,
-          border: (theme) => `1px solid ${theme.palette.divider}`,
-          borderRadius: 10,
-          width: 200,
-          cursor: 'pointer',
-          color: 'text.primary',
-          display: {
-            xs: 'none',
-            md: 'flex',
-          },
-        }}>
-        <Typography
-          variant='body1'
-          color='text.secondary'>
-          Recherche...
-        </Typography>
-        <IoSearchOutline size={20} />
-      </Stack>
       <IconButton
         onClick={handleClickOpen}
-        color='primary'
         sx={{
-          border: (theme) => `1px solid ${theme.palette.divider}`,
-          display: {
-            xs: 'flex',
-            md: 'none',
+          border: (theme) => `1px solid ${theme.palette.primary.main}`,
+          bgcolor: "primary.main",
+          borderRadius: "8px",
+          svg: {
+            color: "#fff",
           },
-        }}>
-        <IoSearchOutline size={20} />
+          "&:hover": {
+            bgcolor: "primary.dark",
+          },
+        }}
+        size={props.isDeskTop ? "medium" : "small"}
+      >
+        <IoSearchOutline size={24} />
       </IconButton>
       <Dialog
         open={open}
         onClose={handleClose}
         // sx={{ "& .MuiPaper-root": { width: 800 } }}
-        maxWidth={'md'}>
+        maxWidth={"md"}
+      >
         <Search onClose={handleClose} />
       </Dialog>
     </>

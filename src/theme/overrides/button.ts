@@ -3,6 +3,7 @@ export default function Button({ ...theme }) {
     MuiButton: {
       styleOverrides: {
         root: {
+          boxShadow: theme.customShadows.primary,
           "&:hover": {
             boxShadow: "none",
           },

@@ -1,17 +1,18 @@
 {
   "menu": [
     {
-      "title": "PRODUITS",
+      "title": "Produits",
       "path": "",
       "isDropdown": true
     },
     {
-      "title": "MARQUAGES",
+      "title": "Marquages",
       "path": "/marquages",
       "isDropdownSm": true
     },
     {
       "title": "NOS REALISATIONS",
+      "title": "Nos Realisations",
       "path": "/achievements"
     },
     {

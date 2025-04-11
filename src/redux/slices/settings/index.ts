@@ -1,26 +1,24 @@
 /* Core */
-import { createSlice } from '@reduxjs/toolkit';
+import { PaletteMode } from "@mui/material";
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState: SettingSliceState = {
-  currency: 'USD',
-  rate: 1,
+  themeMode: "light",
 };
 
 export const settingSlice = createSlice({
-  name: 'setting',
+  name: "setting",
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
-    handleChangeCurrency(state, action) {
-      state.currency = action.payload.currency;
-      state.rate = action.payload.rate;
+    setThemeMode(state, action) {
+      state.themeMode = action.payload;
     },
   },
 });
 
 /* Types */
 export interface SettingSliceState {
-  currency: string;
-  rate: number | string;
+  themeMode: PaletteMode;
 }
-export const { handleChangeCurrency } = settingSlice.actions;
+export const { setThemeMode } = settingSlice.actions;

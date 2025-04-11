@@ -1,9 +1,9 @@
 // ----------------------------------------------------------------------
-import { Noto_Sans } from 'next/font/google';
-const notoSans = Noto_Sans({
+import { Montserrat } from "next/font/google";
+const montserrat = Montserrat({
   // weight: ['300', '400', '500', '600', '700', '800', '900'],
-  subsets: ['latin'],
-  display: 'swap',
+  subsets: ["latin"],
+  display: "swap",
 });
 function pxToRem(value: number) {
   return `${value / 16}rem`;
@@ -19,13 +19,13 @@ function responsiveFontSizes({
   lg: number;
 }) {
   return {
-    '@media (max-width:600px)': {
+    "@media (max-width:600px)": {
       fontSize: pxToRem(sm),
     },
-    '@media (min-width:900px)': {
+    "@media (min-width:900px)": {
       fontSize: pxToRem(md),
     },
-    '@media (min-width:1200px)': {
+    "@media (min-width:1200px)": {
       fontSize: pxToRem(lg),
     },
   };
@@ -37,7 +37,7 @@ const typography = {
   fontWeightBold: 700,
   fontWeightExtraBold: 800,
   fontWeightBlack: 900,
-  fontFamily: notoSans.style.fontFamily,
+  fontFamily: montserrat.style.fontFamily,
   h1: {
     fontWeight: 900,
     lineHeight: 80 / 64,

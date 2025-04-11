@@ -1,33 +1,33 @@
 /* Instruments */
-import { combineReducers } from 'redux';
-import { settingSlice } from './slices/settings';
-import { UserReducer } from './slices/user';
-import productReducer from './slices/product';
-import CategoriesReducer from './slices/categories';
-import { persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage'; // You can use other storage options if needed
+import { combineReducers } from "redux";
+import { settingSlice } from "./slices/settings";
+import { UserReducer } from "./slices/user";
+import productReducer from "./slices/product";
+import CategoriesReducer from "./slices/categories";
+import { persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage"; // You can use other storage options if needed
 
 const rootPersistConfig = {
-  key: 'root',
+  key: "root",
   storage,
-  keyPrefix: 'redux-',
+  keyPrefix: "redux-",
   whitelist: [],
 };
 
 const productPersistConfig = {
-  key: 'product',
+  key: "product",
   storage,
-  keyPrefix: 'redux-',
-  whitelist: ['sortBy', 'checkout'],
+  keyPrefix: "redux-",
+  whitelist: ["sortBy", "checkout"],
 };
 const userPersistConfig = {
-  key: 'user',
+  key: "user",
   storage,
-  keyPrefix: 'redux-',
-  whitelist: ['user', 'isAuthenticated'],
+  keyPrefix: "redux-",
+  whitelist: ["user", "isAuthenticated"],
 };
 const persistConfig = {
-  key: 'settings',
+  key: "settings",
   storage, // Use the storage engine you imported
   // Other configuration options if needed
 };

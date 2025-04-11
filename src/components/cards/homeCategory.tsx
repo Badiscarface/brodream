@@ -1,7 +1,7 @@
-'use client';
-import React from 'react';
+"use client";
+import React from "react";
 // next
-import Image from 'next/image';
+import Image from "next/image";
 
 // mui
 import {
@@ -11,8 +11,8 @@ import {
   CardContent,
   Stack,
   Typography,
-} from '@mui/material';
-import { useRouter } from 'next-nprogress-bar';
+} from "@mui/material";
+import { useRouter } from "next-nprogress-bar";
 
 export default function HomeCategoryCard({ ...props }) {
   const { item } = props;
@@ -21,40 +21,41 @@ export default function HomeCategoryCard({ ...props }) {
   const router = useRouter();
   return (
     <Card>
-      <CardActionArea onClick={() => router.push(`/personalize/${item.slug}`)}>
+      <CardActionArea
+        onClick={() => router.push(`/personalize/${item.slug}`)}
+        sx={{
+          p: 1.5,
+        }}
+      >
         <Box
           sx={{
-            position: 'relative',
-            height: { xs: 200, md: 250 },
-            width: '100%',
+            position: "relative",
+            height: { xs: 260, md: 280 },
+            width: "100%",
             img: {
-              objectFit: 'cover',
+              borderRadius: "12px 12px 0 0",
+              objectFit: "cover",
             },
-          }}>
-          <Image
-            src={item?.cover.url}
-            alt={item.name}
-            fill
-            priority
-          />
+          }}
+        >
+          <Image src={item?.cover.url} alt={item.name} fill priority />
         </Box>
         <CardContent
           sx={{
-            p: 1.5,
-            pb: '16px !important',
-          }}>
-          <Stack
-            alignItems='center'
-            justifyContent='center'
-            spacing={0.2}>
-            <Typography
-              variant='h6'
-              color='text.primary'>
+            p: 0,
+            py: "12px !important",
+          }}
+        >
+          <Stack alignItems={"center"} spacing={0.2}>
+            <Typography variant="h6" color="text.primary">
               {item.name}
             </Typography>
-            <Typography variant='body2'>
-              {item.productCount}{' '}
-              {item.productCount > 1 ? 'Products' : 'Product'}
+            {/* <Typography variant="body2">
+              {item.productCount}{" "}
+              {item.productCount > 1 ? "Products" : "Product"}
+            </Typography> */}
+            <Typography variant="body2" textAlign={"center"}>
+              {item.description.slice(0, 60)}{" "}
             </Typography>
           </Stack>
         </CardContent>
