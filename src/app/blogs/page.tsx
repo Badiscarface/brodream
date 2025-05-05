@@ -1,15 +1,15 @@
-import React from 'react';
+import React from "react";
 // mui
-import { Container } from '@mui/material';
+import { Container } from "@mui/material";
 // components
-import MainBlogs from '@/components/blogs';
-import * as api from '@/services';
+import MainBlogs from "@/components/blogs";
+import * as api from "@/services";
 
 export default async function Page() {
-  const blogData = await api.getHomeBlogs();
+  const blogData = await api.getBlogs();
   return (
     <>
-      <Container>
+      <Container maxWidth="xl">
         <MainBlogs data={blogData} />
       </Container>
     </>

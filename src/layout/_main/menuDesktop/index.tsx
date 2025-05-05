@@ -17,10 +17,6 @@ import MenuDesktopPopover from "@/components/popover/menuDesktop";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
-// // api
-// import { useQuery } from 'react-query';
-// import * as api from 'src/services';
-
 // ----------------------------------------------------------------------
 interface NavConfigProps {
   item: [];

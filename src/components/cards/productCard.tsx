@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-// next
 import Image from "next/image";
 // mui
 import {
@@ -12,33 +11,30 @@ import {
   Tooltip,
   Typography,
   Zoom,
+  Button,
+  alpha,
+  Skeleton,
 } from "@mui/material";
 // icons
 import { GoEye } from "react-icons/go";
-// image
-// import { FaStar } from 'react-icons/fa';
+// custom components
 import ColorPreviewGroup from "../colorPreviewGroup";
 import ProductDetailsDialog from "../dialog/productDetails";
 import { useRouter } from "next-nprogress-bar";
 import Link from "next/link";
-import * as api from "@/services";
-import { useQuery } from "react-query";
+
 // hooks
-import { useCurrencyConvert } from "@/hooks/convertCurrency";
 import { useCurrencyFormatter } from "@/hooks/formatCurrency";
 
 export default function ProductCard({ ...props }) {
-  const { item } = props;
+  const { item, isLoading } = props;
   const router = useRouter();
-  const cCurrency = useCurrencyConvert();
   const fCurrency = useCurrencyFormatter();
-  const { data, isLoading } = useQuery(["product-detail-slug", item.slug], () =>
-    api.getProductBySlug(item.slug)
-  );
+
   const [open, setOpen] = useState(false);
   const [openActions, setOpenActions] = useState(false);
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
 
-  const [selectedColor, setSelectedColor] = React.useState<string | null>(null);
   const handleColorClick = (color: string) => {
     setSelectedColor((prevColor) => (prevColor === color ? null : color));
   };
@@ -46,7 +42,6 @@ export default function ProductCard({ ...props }) {
   const selectImage = item?.variants?.find(
     (items: { name: string }) => items.name === selectedColor
   );
-  console.log(selectImage, item, "itemitem");
 
   return (
     <Card
@@ -57,30 +52,41 @@ export default function ProductCard({ ...props }) {
         sx={{
           position: "relative",
           height: "100%",
+          px: 1.5,
+          pt: 1.5,
         }}
       >
-        <Box
-          onClick={() => router.push(`/product/${item.slug}`)}
-          sx={{
-            cursor: "pointer",
-            position: "relative",
-            height: { xs: 200, md: 250 },
-            width: "100%",
-            img: {
-              objectFit: "cover",
-            },
-          }}
-        >
-          <Image
-            src={selectImage ? selectImage?.image.url : item?.image.url}
-            alt={item.name}
-            fill
-            priority
+        {isLoading ? (
+          <Skeleton
+            width={"100%"}
+            sx={{ height: { xs: 220, md: 250 } }}
+            variant="rounded"
           />
-        </Box>
+        ) : (
+          <Box
+            onClick={() => router.push(`/product/${item?.slug}`)}
+            sx={{
+              cursor: "pointer",
+              position: "relative",
+              height: { xs: 220, md: 250 },
+              width: "100%",
+              img: {
+                objectFit: "cover",
+                borderRadius: "12px",
+              },
+            }}
+          >
+            <Image
+              src={selectImage ? selectImage?.image.url : item?.image.url}
+              alt={item.name}
+              fill
+              priority
+            />
+          </Box>
+        )}
+
         <Zoom in={openActions}>
           <Box>
-            {}
             <Stack
               direction={"row"}
               sx={{
@@ -94,84 +100,85 @@ export default function ProductCard({ ...props }) {
                 zIndex: 11,
               }}
             >
-              {
-                <Tooltip title="Quick View">
-                  <IconButton
-                    aria-label="Quick View"
-                    onClick={() => setOpen(true)}
-                  >
-                    <GoEye />
-                  </IconButton>
-                </Tooltip>
-              }
+              <Tooltip title="Aperçu rapide">
+                <IconButton
+                  aria-label="Aperçu rapide"
+                  onClick={() => setOpen(true)}
+                >
+                  <GoEye />
+                </IconButton>
+              </Tooltip>
             </Stack>
           </Box>
         </Zoom>
       </Box>
-      <CardContent
-        sx={{
-          p: 1.5,
-          pb: "16px !important",
-          height: "100%",
-        }}
-      >
-        <ColorPreviewGroup
-          handleColorClick={handleColorClick}
-          selectedColor={selectedColor}
-          colors={item.variants}
-        />
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-          spacing={2}
-        >
+
+      <CardContent sx={{ p: 1.5, pb: "16px !important", height: "100%" }}>
+        <Stack gap={1}>
           <Typography
             variant="h6"
             color="text.primary"
             component={Link}
-            href="/product/abcd"
+            href={`/product/${item?.slug}`}
             noWrap
+            lineHeight={1}
           >
-            {item.name}
+            {isLoading ? <Skeleton variant="text" width={100} /> : item.name}
           </Typography>
-          {/* <Typography
-            variant='body2'
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 0.5,
-              svg: {
-                color: 'warning.main',
-              },
-            }}>
-            ({item.rating})
-            <FaStar />
-          </Typography> */}
-        </Stack>
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-          spacing={2}
-        >
-          <Typography variant="subtitle1">
-            {" "}
-            {fCurrency(cCurrency(item.priceSale))}
+
+          <Typography variant="body2" color="text.secondary" lineHeight={1}>
+            {isLoading ? (
+              <Skeleton variant="text" width={120} />
+            ) : (
+              item.shortDescription
+            )}
           </Typography>
+
+          {isLoading ? (
+            <Stack direction="row" gap={0.5}>
+              {[...new Array(5)].map((_, index) => (
+                <Skeleton
+                  key={index}
+                  variant="rounded"
+                  width={27}
+                  height={27}
+                />
+              ))}
+            </Stack>
+          ) : (
+            <ColorPreviewGroup
+              handleColorClick={handleColorClick}
+              selectedColor={selectedColor}
+              colors={item.variants}
+            />
+          )}
+
+          <div>
+            {isLoading ? (
+              <Skeleton variant="rounded" width={153} height={32} />
+            ) : (
+              <Button
+                variant="outlined"
+                color="primary"
+                sx={{
+                  boxShadow: "none",
+                  bgcolor: (theme) => alpha(theme.palette.primary.main, 0.1),
+                }}
+                size="small"
+              >
+                À partir de {fCurrency(item.priceSale)}
+              </Button>
+            )}
+          </div>
         </Stack>
       </CardContent>
+
       {open && (
         <ProductDetailsDialog
           open={open}
           isPopup
           onClose={() => setOpen(false)}
           slug={item.slug}
-          data={data?.data}
-          totalRating={data?.data?.totalRating}
-          totalReviews={data?.data?.totalReviews}
-          category={data?.data?.category}
-          isLoading={isLoading}
         />
       )}
     </Card>

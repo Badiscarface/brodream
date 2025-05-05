@@ -1,11 +1,11 @@
-import CustomGridLayout from '@/components/achievements';
-import { Container } from '@mui/material';
-import React from 'react';
+import CustomGridLayout from "@/components/achievements";
+import { Container } from "@mui/material";
+import React from "react";
 
 export default function Page() {
   return (
     <>
-      <Container>
+      <Container maxWidth="xl">
         <CustomGridLayout />
       </Container>
     </>

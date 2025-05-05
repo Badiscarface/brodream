@@ -1,12 +1,12 @@
-import { useState } from 'react';
+import { useState } from "react";
 // import PropTypes from 'prop-types';
 // mui
-import { Collapse, Grid, Card, Box } from '@mui/material';
+import { Collapse, Grid, Card, Box } from "@mui/material";
 // components
-import ReviewForm from '@/components/forms/reviews';
-import ReviewOverview from '@/components/product/reviews/overview';
-import ReviewsList from '@/components/lists/reviews';
-import NoDataFoundIllustration from '@/illustrations/dataNotFound';
+import ReviewForm from "@/components/forms/reviews";
+import ReviewOverview from "@/components/product/reviews/overview";
+import ReviewsList from "@/components/lists/reviews";
+import NoDataFoundIllustration from "@/illustrations/dataNotFound";
 
 interface Image {
   url: string;
@@ -47,7 +47,7 @@ export default function ProductReview({
   const [state, setState] = useState<Review[]>([]);
   const [reviewBox, setReviewBox] = useState(false);
 
-  console.log(reviews, reviewsSummary, setState, 'selectedColor');
+  console.log(reviews, reviewsSummary, setState, "selectedColor");
   const handleOpenReviewBox = () => {
     setReviewBox((prev) => !prev);
   };
@@ -61,13 +61,13 @@ export default function ProductReview({
 
   return (
     <Box sx={{ p: 2 }}>
-      <Grid
-        container
-        spacing={3}>
+      <Grid container spacing={3}>
         <Grid
-          item
-          xs={12}
-          md={8}>
+          size={{
+            md: 8,
+            xs: 12,
+          }}
+        >
           <Collapse in={reviewBox}>
             <Card sx={{ mb: 3 }}>
               <ReviewForm
@@ -88,10 +88,12 @@ export default function ProductReview({
           </Collapse>
         </Grid>
         <Grid
-          item
-          xs={12}
-          md={4}>
-          <Card sx={{ position: 'sticky', top: 156, mb: 3 }}>
+          size={{
+            md: 4,
+            xs: 12,
+          }}
+        >
+          <Card sx={{ position: "sticky", top: 156, mb: 3 }}>
             <ReviewOverview
               totalRating={totalRating}
               totalReviews={totalReviews}

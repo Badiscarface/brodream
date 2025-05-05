@@ -1,16 +1,16 @@
 // react
-'use client';
-import PropTypes from 'prop-types';
-import { useState } from 'react';
+"use client";
+import PropTypes from "prop-types";
+import { useState } from "react";
 // mui
-import { Paper, useMediaQuery, Grid, Fab, Stack } from '@mui/material';
+import { Paper, useMediaQuery, Grid, Fab, Stack } from "@mui/material";
 // icons
-import { IoArrowForward } from 'react-icons/io5';
-import { IoArrowBackOutline } from 'react-icons/io5';
+import { IoArrowForward } from "react-icons/io5";
+import { IoArrowBackOutline } from "react-icons/io5";
 // framer motion
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from "framer-motion";
 // components
-import ProductCard from '@/components/cards/productCard';
+import ProductCard from "@/components/cards/productCard";
 
 interface ProductProp {
   id: number; // or string, depending on your data structure
@@ -55,15 +55,16 @@ function CarouselItem({ ...props }) {
   console.log(index, isLoading);
   return (
     <Paper
-      className='slide-wrapper'
+      className="slide-wrapper"
       elevation={0}
       sx={{
-        position: 'relative',
-        pb: { md: '38%', sm: '82%', xs: '142%' },
+        position: "relative",
+        pb: { md: "38%", sm: "82%", xs: "142%" },
         zIndex: 11,
-        bgcolor: 'transparent',
+        bgcolor: "transparent",
         borderRadius: 0,
-      }}>
+      }}
+    >
       <ProductCard
       // loading={isLoading}
       // product={index}
@@ -84,10 +85,10 @@ ProductsCarousel.propTypes = {
 export default function ProductsCarousel({ ...props }) {
   const { data, isLoading } = props;
 
-  const isLarge = useMediaQuery('(min-width:1200px)');
-  const isDesktop = useMediaQuery('(min-width:900px)');
-  const isTablet = useMediaQuery('(min-width:600px)');
-  const isMobile = useMediaQuery('(max-width:600px)');
+  const isLarge = useMediaQuery("(min-width:1200px)");
+  const isDesktop = useMediaQuery("(min-width:900px)");
+  const isTablet = useMediaQuery("(min-width:600px)");
+  const isMobile = useMediaQuery("(max-width:600px)");
 
   const [[page, direction], setPage] = useState([0, 0]);
   const slidesToShow = isLarge
@@ -116,55 +117,55 @@ export default function ProductsCarousel({ ...props }) {
     <Paper
       elevation={0}
       sx={{
-        position: 'relative',
+        position: "relative",
         borderRadius: 0,
-        width: '100%',
+        width: "100%",
         marginLeft: 0,
-        '& .slide-wrapper ': {
-          paddingBottom: '60%',
+        "& .slide-wrapper ": {
+          paddingBottom: "60%",
         },
-      }}>
+      }}
+    >
       <Paper
-        className='main-paper'
+        className="main-paper"
         elevation={0}
         sx={{
-          position: 'relative',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          pt: { lg: '35%', md: '44%', sm: '73%', xs: '86%' },
-          overflow: 'hidden',
-          width: { xs: '100%', sm: 'calc(100% + 48px)' },
+          position: "relative",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          pt: { lg: "35%", md: "44%", sm: "73%", xs: "86%" },
+          overflow: "hidden",
+          width: { xs: "100%", sm: "calc(100% + 48px)" },
           // width: 'calc(100% + 48px)',
-          ml: { xs: 0, md: '-24px' },
-          '& .motion-dev': {
+          ml: { xs: 0, md: "-24px" },
+          "& .motion-dev": {
             pl: { md: `24px !important`, xs: `0px !important` },
             pr: { md: `24px !important`, xs: `0px !important` },
           },
-        }}>
-        <AnimatePresence
-          initial={false}
-          custom={direction}>
+        }}
+      >
+        <AnimatePresence initial={false} custom={direction}>
           <motion.div
             // className='motion-dev'
             style={{
-              position: 'absolute',
-              width: '100%',
-              height: '100%',
-              overflow: 'hidden',
+              position: "absolute",
+              width: "100%",
+              height: "100%",
+              overflow: "hidden",
               top: 0,
             }}
             key={page}
             custom={direction}
             variants={variants}
-            initial='enter'
-            animate='center'
-            exit='exit'
+            initial="enter"
+            animate="center"
+            exit="exit"
             transition={{
-              x: { type: 'spring', stiffness: 300, damping: 30 },
+              x: { type: "spring", stiffness: 300, damping: 30 },
               opacity: { duration: 0.2 },
             }}
-            drag='x'
+            drag="x"
             dragConstraints={{ left: 0, right: 0 }}
             dragElastic={1}
             onDragEnd={(e, { offset, velocity }) => {
@@ -174,11 +175,9 @@ export default function ProductsCarousel({ ...props }) {
               } else if (swipe > swipeConfidenceThreshold) {
                 paginate(-1);
               }
-            }}>
-            <Grid
-              container
-              spacing={2}
-              justifyContent='center'>
+            }}
+          >
+            <Grid container spacing={2} justifyContent="center">
               {(isLoading
                 ? Array.from(new Array(4))
                 : data?.slice(
@@ -187,12 +186,13 @@ export default function ProductsCarousel({ ...props }) {
                   )
               ).map((item: ProductProp) => (
                 <Grid
-                  item
-                  lg={3}
-                  md={4}
-                  sm={6}
-                  xs={6}
-                  key={Math.random()}>
+                  size={{
+                    lg: 3,
+                    md: 4,
+                    xs: 6,
+                  }}
+                  key={Math.random()}
+                >
                   <CarouselItem
                     product={data ? item : null}
                     index={data ? item : null}
@@ -209,45 +209,48 @@ export default function ProductsCarousel({ ...props }) {
       </Paper>
       {!isLoading && (
         <Stack
-          direction={'row'}
-          alignItems='center'
-          justifyContent='space-between'
+          direction={"row"}
+          alignItems="center"
+          justifyContent="space-between"
           spacing={1}
-          className='slider-arrows'>
+          className="slider-arrows"
+        >
           <Fab
-            color='primary'
-            aria-label='back'
-            size='small'
-            className='left'
+            color="primary"
+            aria-label="back"
+            size="small"
+            className="left"
             onClick={() => paginate(-1)}
             disabled={page === 0}
             sx={{
-              display: page === 0 ? 'none' : 'flex',
-              position: 'absolute',
-              transform: 'translateY(-50%)',
-              left: '-1.5%',
-              top: '40%',
-              transition: 'all 0.2s ease-in-out',
+              display: page === 0 ? "none" : "flex",
+              position: "absolute",
+              transform: "translateY(-50%)",
+              left: "-1.5%",
+              top: "40%",
+              transition: "all 0.2s ease-in-out",
               zIndex: 11,
-            }}>
+            }}
+          >
             <IoArrowBackOutline size={isMobile ? 16 : 24} />
           </Fab>
           <Fab
-            color='primary'
-            aria-label='forward'
-            size='small'
-            className='right'
+            color="primary"
+            aria-label="forward"
+            size="small"
+            className="right"
             onClick={() => paginate(1)}
             disabled={totalSlides - 1 === page}
             sx={{
-              display: totalSlides - 1 === page ? 'none' : 'flex',
-              transform: 'translateY(-50%)',
-              right: '-1.5%',
-              top: '40%',
-              transition: 'all 0.2s ease-in-out',
-              position: 'absolute',
+              display: totalSlides - 1 === page ? "none" : "flex",
+              transform: "translateY(-50%)",
+              right: "-1.5%",
+              top: "40%",
+              transition: "all 0.2s ease-in-out",
+              position: "absolute",
               zIndex: 11,
-            }}>
+            }}
+          >
             <IoArrowForward size={isMobile ? 16 : 24} />
           </Fab>
         </Stack>

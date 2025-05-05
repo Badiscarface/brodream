@@ -1,12 +1,13 @@
 "use client";
 import React from "react";
+import Link from "next/link";
 // /mui
 import {
   Box,
   Card,
   CardContent,
   Container,
-  Grid2,
+  Grid,
   Stack,
   Typography,
   Button,
@@ -17,8 +18,10 @@ import Image from "next/image";
 // import TablierImg from '../../../public/images/tablier.jpg';
 import { useRouter } from "next-nprogress-bar";
 import NoDataFoundIllustration from "@/illustrations/dataNotFound";
+import { fDateShort } from "@/utils/formatTime";
+import Label from "../label";
 
-export default function ChooseUS({ ...props }) {
+export default function Blogs({ ...props }) {
   const data = props;
   const detailData = data?.data;
   const router = useRouter();
@@ -29,7 +32,7 @@ export default function ChooseUS({ ...props }) {
         py: 5,
       }}
     >
-      <Container>
+      <Container maxWidth="xl">
         <Stack spacing={2} alignItems="center" textAlign="center" mb={5}>
           <Stack spacing={2} alignItems="center" textAlign="center" mb={5}>
             <Typography variant="h2" color="text.primary">
@@ -44,17 +47,20 @@ export default function ChooseUS({ ...props }) {
           </Stack>
         </Stack>
         {detailData.length > 0 ? (
-          <Grid2 container spacing={4}>
+          <Grid container spacing={2} justifyContent={"center"}>
             {detailData.slice(0, 2).map(
               (item: {
                 title: string;
-                description: string;
+                shortDescription: string;
                 slug: string;
+                createdAt: string;
+                category: string;
+
                 cover: {
                   url: string;
                 };
               }) => (
-                <Grid2 key={Math.random()} size={{ xs: 6, md: 3 }}>
+                <Grid key={Math.random()} size={{ xs: 12, sm: 6, md: 4 }}>
                   <Card
                     sx={{
                       transition: "ease-in-out .5s",
@@ -68,15 +74,17 @@ export default function ChooseUS({ ...props }) {
                       // direction={{ xs: "column", md: "row" }}
                       // alignItems="center"
                       spacing={2}
+                      sx={{ p: 1 }}
                     >
                       <Box
                         sx={{
                           position: "relative",
-                          height: 220,
-                          width: { xs: "100%", md: 220 },
-                          minWidth: 220,
+                          height: 210,
+                          width: { xs: "100%" },
+
                           img: {
                             objectFit: "cover",
+                            borderRadius: "8px 8px 0 0",
                           },
                         }}
                       >
@@ -93,39 +101,60 @@ export default function ChooseUS({ ...props }) {
                           pb: "16px !important",
                         }}
                       >
-                        <Stack
-                          spacing={2}
-                          alignItems="center"
-                          justifyContent="center"
-                          textAlign="center"
-                        >
-                          <Typography variant="subtitle1">
+                        <Stack spacing={1} justifyContent="center">
+                          <Typography
+                            variant="h6"
+                            color="text.primary"
+                            sx={{
+                              lineHeight: 1.4,
+                              "&:hover": {
+                                color: "primary.main",
+                              },
+                            }}
+                            component={Link}
+                            href={`/blogs/${item.slug}`}
+                          >
                             {item.title}
                           </Typography>
+                          <Stack
+                            gap={1}
+                            justifyContent={"space-between"}
+                            direction="row"
+                            alignItems={"center"}
+                          >
+                            <Typography
+                              variant="subtitle2"
+                              color="primary.main"
+                              fontWeight={500}
+                            >
+                              {fDateShort(item.createdAt)}
+                            </Typography>
+                            <Label color="success">{item.category}</Label>
+                          </Stack>
                           <Typography
-                            variant="body1"
-                            dangerouslySetInnerHTML={{
-                              __html: `${item.description.slice(0, 100)}`,
-                            }}
-                          />
+                            variant="subtitle2"
+                            color="text.secondary"
+                            fontWeight={400}
+                          >
+                            {item.shortDescription}
+                          </Typography>
                           <Box>
                             <Button
-                              variant="outlined"
+                              variant="contained"
                               onClick={() => router.push(`/blogs/${item.slug}`)}
-                              size="small"
                               color="primary"
                             >
-                              Read More
+                              Read full blog
                             </Button>
                           </Box>
                         </Stack>
                       </CardContent>
                     </Stack>
                   </Card>
-                </Grid2>
+                </Grid>
               )
             )}
-          </Grid2>
+          </Grid>
         ) : (
           <NoDataFoundIllustration />
         )}

@@ -1,10 +1,12 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { toast } from 'react-hot-toast';
-import dynamic from 'next/dynamic';
+"use client";
+
+import React from "react";
+import PropTypes from "prop-types";
+import { toast } from "react-hot-toast";
+import dynamic from "next/dynamic";
+import axios from "axios";
 
 // mui
-import { styled } from '@mui/material/styles';
 import {
   Button,
   TextField,
@@ -14,30 +16,36 @@ import {
   Rating,
   Checkbox,
   FormControlLabel,
-} from '@mui/material';
-import LoadingButton from '@/components/LoadingButton';
-// react
-import { useMutation } from 'react-query';
-// api
-import * as api from '@/services';
-import axios from 'axios';
-// formik
-import { useFormik, Form, FormikProvider } from 'formik';
-// yup
-import * as Yup from 'yup';
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
+import LoadingButton from "@/components/LoadingButton";
 
-// dynamic
+// formik
+import { useFormik, Form, FormikProvider } from "formik";
+
+// yup
+import * as Yup from "yup";
+
+// tanstack query
+import { useMutation } from "@tanstack/react-query";
+
+// api
+import * as api from "@/services";
+
+// dynamic component
 const UploadMultiFile = dynamic(
-  () => import('@/components/upload/UploadMultiFile')
+  () => import("@/components/upload/UploadMultiFile")
 );
 
-const RootStyle = styled('div')(({ theme }) => ({
+// styles
+const RootStyle = styled("div")(({ theme }) => ({
   margin: theme.spacing(3),
   padding: theme.spacing(3),
-  borderRadius: '8px',
+  borderRadius: "8px",
   backgroundColor: theme.palette.background.default,
 }));
 
+// types
 interface Image {
   url: string;
   id: string;
@@ -51,6 +59,7 @@ interface Error {
     };
   };
 }
+
 interface ProductDetailsReviewFormProps {
   onClose: () => void;
   pid: string;
@@ -63,22 +72,16 @@ const ProductDetailsReviewForm: React.FC<ProductDetailsReviewFormProps> = ({
   onClickCancel,
   ...other
 }) => {
-  const [loading, setLoading] = React.useState<boolean>(false);
-
-  const { mutate: deleteMutate } = useMutation(api.singleDeleteFile, {
-    onError: (error: Error) => {
-      toast.error(error.response.data.message);
-    },
-  });
+  const [loading, setLoading] = React.useState(false);
 
   const ReviewSchema = Yup.object().shape({
-    rating: Yup.mixed().required('Rating is required'),
-    confortRating: Yup.mixed().required('Rating is required'),
-    qualityRating: Yup.mixed().required('Rating is required'),
-    headlines: Yup.string().required('Headlines is required'),
-    name: Yup.string().required('Name is required'),
-    email: Yup.string().required('Email is required'),
-    message: Yup.string().required('Message is required'),
+    rating: Yup.number().required("Rating is required"),
+    confortRating: Yup.number().required("Rating is required"),
+    qualityRating: Yup.number().required("Rating is required"),
+    headlines: Yup.string().required("Headlines is required"),
+    name: Yup.string().required("Name is required"),
+    email: Yup.string().email("Invalid email").required("Email is required"),
+    message: Yup.string().required("Message is required"),
   });
 
   const formik = useFormik({
@@ -86,23 +89,22 @@ const ProductDetailsReviewForm: React.FC<ProductDetailsReviewFormProps> = ({
       rating: null,
       confortRating: null,
       qualityRating: null,
-      headlines: '',
-      name: '',
-      email: '',
+      headlines: "",
+      name: "",
+      email: "",
       recommended: false,
-      message: '',
-      location: '',
+      message: "",
+      location: "",
       images: [] as Image[],
       blob: [] as File[],
     },
     validationSchema: ReviewSchema,
     onSubmit: async (values) => {
-      mutate({
+      reviewMutation.mutate({
         ...values,
-        rating: values.rating,
-        status: 'pending',
+        status: "pending",
         images: values.images.map((v) => v.url),
-        pid: pid,
+        pid,
       });
     },
   });
@@ -117,11 +119,19 @@ const ProductDetailsReviewForm: React.FC<ProductDetailsReviewFormProps> = ({
     getFieldProps,
   } = formik;
 
-  const { mutate, isLoading } = useMutation(api.addReview, {
+  const reviewMutation = useMutation({
+    mutationFn: api.addReview,
     onSuccess: () => {
-      toast.success('Review Added. Admin will approve soon');
+      toast.success("Review Added. Admin will approve soon");
       resetForm();
       onClose();
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: api.singleDeleteFile,
+    onError: (error: Error) => {
+      toast.error(error.response.data.message);
     },
   });
 
@@ -134,12 +144,12 @@ const ProductDetailsReviewForm: React.FC<ProductDetailsReviewFormProps> = ({
     setLoading(true);
     const uploaders = acceptedFiles.map((file) => {
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append("file", file);
       formData.append(
-        'upload_preset',
-        `${process.env.CLOUDINARY_UPLOAD_PRESET}`
+        "upload_preset",
+        process.env.CLOUDINARY_UPLOAD_PRESET || ""
       );
-      setFieldValue('blob', [...values.blob, ...acceptedFiles]);
+      setFieldValue("blob", [...values.blob, ...acceptedFiles]);
 
       return axios.post(
         `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload`,
@@ -147,9 +157,7 @@ const ProductDetailsReviewForm: React.FC<ProductDetailsReviewFormProps> = ({
       );
     });
 
-    const blobs = acceptedFiles.map((file) => {
-      return URL.createObjectURL(file);
-    });
+    const blobs = acceptedFiles.map((file) => URL.createObjectURL(file));
 
     axios.all(uploaders).then((data) => {
       const newImages = data.map(({ data }, i) => ({
@@ -158,149 +166,140 @@ const ProductDetailsReviewForm: React.FC<ProductDetailsReviewFormProps> = ({
         blob: blobs[i],
       }));
       setLoading(false);
-      setFieldValue('images', [...values.images, ...newImages]);
+      setFieldValue("images", [...values.images, ...newImages]);
     });
   };
 
   const handleRemoveAll = () => {
     values.images.forEach((image) => {
-      deleteMutate({ id: image.id } as any);
+      deleteMutation.mutate({ id: image.id });
     });
-    setFieldValue('images', []);
+    setFieldValue("images", []);
   };
 
   const handleRemove = (file: Image) => {
     const removeImage = values.images.filter((_file) => {
       if (_file.id === file.id) {
-        deleteMutate({ id: file.id } as any);
+        deleteMutation.mutate({ id: file.id });
       }
       return _file !== file;
     });
-    setFieldValue('images', removeImage);
+    setFieldValue("images", removeImage);
   };
 
   return (
     <RootStyle {...other}>
-      <Typography
-        variant='subtitle1'
-        gutterBottom>
+      <Typography variant="subtitle1" gutterBottom>
         Write Your Reviews
       </Typography>
 
       <FormikProvider value={formik}>
-        <Form
-          autoComplete='off'
-          noValidate
-          onSubmit={handleSubmit}>
+        <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
           <Stack spacing={3}>
+            {/* Rating */}
             <Stack spacing={0.3}>
               <Stack
-                direction={{ xs: 'column', sm: 'row' }}
-                alignItems={{ sm: 'center' }}
-                spacing={1.5}>
-                <Typography variant='body2'>Your Review About</Typography>
+                direction={{ xs: "column", sm: "row" }}
+                alignItems="center"
+                spacing={1.5}
+              >
+                <Typography variant="body2">Your Review About</Typography>
                 <Rating
-                  {...getFieldProps('rating')}
-                  onChange={(event: any) =>
-                    setFieldValue('rating', event.target.value)
-                  }
+                  value={values.rating}
+                  onChange={(_, value) => setFieldValue("rating", value)}
                 />
               </Stack>
-              {errors.rating && (
-                <FormHelperText error>
-                  {touched.rating && 'Rating Required'}
-                </FormHelperText>
+              {errors.rating && touched.rating && (
+                <FormHelperText error>{errors.rating}</FormHelperText>
               )}
             </Stack>
+
+            {/* Inputs */}
             <TextField
               fullWidth
-              label='Name'
-              type='text'
-              {...getFieldProps('name')}
+              label="Name"
+              {...getFieldProps("name")}
               error={Boolean(touched.name && errors.name)}
               helperText={touched.name && errors.name}
             />
             <TextField
               fullWidth
-              label='Email'
-              type='text'
-              {...getFieldProps('email')}
+              label="Email"
+              {...getFieldProps("email")}
               error={Boolean(touched.email && errors.email)}
               helperText={touched.email && errors.email}
             />
             <TextField
               fullWidth
-              label='Headlines'
-              type='text'
-              {...getFieldProps('headlines')}
+              label="Headlines"
+              {...getFieldProps("headlines")}
               error={Boolean(touched.headlines && errors.headlines)}
               helperText={touched.headlines && errors.headlines}
             />
-
-            <Stack spacing={0.3}>
-              <Stack
-                direction={{ xs: 'column', sm: 'row' }}
-                alignItems={{ sm: 'center' }}
-                spacing={1.5}>
-                <Typography variant='body2'>
-                  How would you rate the quality?
-                </Typography>
-                <Rating
-                  {...getFieldProps('qualityRating')}
-                  onChange={(event: any) =>
-                    setFieldValue('qualityRating', event.target.value)
-                  }
-                />
-              </Stack>
-              {errors.qualityRating && (
-                <FormHelperText error>
-                  {touched.qualityRating && 'Quality Rating Required'}
-                </FormHelperText>
-              )}
-            </Stack>
             <TextField
               fullWidth
-              label='Location'
-              type='text'
-              {...getFieldProps('location')}
+              label="Location"
+              {...getFieldProps("location")}
               error={Boolean(touched.location && errors.location)}
               helperText={touched.location && errors.location}
             />
+
+            {/* Quality Rating */}
             <Stack spacing={0.3}>
               <Stack
-                direction={{ xs: 'column', sm: 'row' }}
-                alignItems={{ sm: 'center' }}
-                spacing={1.5}>
-                <Typography variant='body2'>
-                  How would you rate the confort?
+                direction={{ xs: "column", sm: "row" }}
+                alignItems="center"
+                spacing={1.5}
+              >
+                <Typography variant="body2">
+                  How would you rate the quality?
                 </Typography>
                 <Rating
-                  {...getFieldProps('confortRating')}
-                  onChange={(event: any) =>
-                    setFieldValue('confortRating', event.target.value)
-                  }
+                  value={values.qualityRating}
+                  onChange={(_, value) => setFieldValue("qualityRating", value)}
                 />
               </Stack>
-              {errors.confortRating && (
-                <FormHelperText error>
-                  {touched.confortRating && 'Confort Rating Required'}
-                </FormHelperText>
+              {errors.qualityRating && touched.qualityRating && (
+                <FormHelperText error>{errors.qualityRating}</FormHelperText>
               )}
             </Stack>
+
+            {/* Comfort Rating */}
+            <Stack spacing={0.3}>
+              <Stack
+                direction={{ xs: "column", sm: "row" }}
+                alignItems="center"
+                spacing={1.5}
+              >
+                <Typography variant="body2">
+                  How would you rate the comfort?
+                </Typography>
+                <Rating
+                  value={values.confortRating}
+                  onChange={(_, value) => setFieldValue("confortRating", value)}
+                />
+              </Stack>
+              {errors.confortRating && touched.confortRating && (
+                <FormHelperText error>{errors.confortRating}</FormHelperText>
+              )}
+            </Stack>
+
+            {/* Message */}
             <TextField
               fullWidth
               multiline
               rows={3}
-              label='Message'
-              type='text'
-              {...getFieldProps('message')}
+              label="Message"
+              {...getFieldProps("message")}
               error={Boolean(touched.message && errors.message)}
               helperText={touched.message && errors.message}
             />
+
+            {/* File Upload */}
             <UploadMultiFile
               showPreview
               maxSize={3145728}
-              accept='image/*'
+              accept="image/*"
               files={values.images}
               loading={loading}
               onDrop={handleDrop}
@@ -310,37 +309,39 @@ const ProductDetailsReviewForm: React.FC<ProductDetailsReviewFormProps> = ({
               error={Boolean(touched.images && errors.images)}
             />
             {touched.images && errors.images && (
-              <FormHelperText
-                error
-                sx={{ px: 2 }}>
-                {touched.images && (errors.images as string)}
+              <FormHelperText error sx={{ px: 2 }}>
+                {errors.images as string}
               </FormHelperText>
             )}
+
+            {/* Checkbox */}
             <FormControlLabel
               control={
                 <Checkbox
-                  {...getFieldProps('recommended')}
+                  {...getFieldProps("recommended")}
                   checked={values.recommended}
                 />
               }
-              label='Would you recommend this product to a friend?'
+              label="Would you recommend this product to a friend?"
             />
-            <Stack
-              direction='row'
-              justifyContent='flex-end'>
+
+            {/* Actions */}
+            <Stack direction="row" justifyContent="flex-end">
               <Button
-                type='button'
-                color='inherit'
-                size='large'
-                variant='outlined'
+                type="button"
+                color="inherit"
+                size="large"
+                variant="outlined"
                 onClick={onCancel}
-                sx={{ mr: 1.5 }}>
+                sx={{ mr: 1.5 }}
+              >
                 Cancel
               </Button>
               <LoadingButton
-                type='submit'
-                variant='contained'
-                loading={isLoading}>
+                type="submit"
+                variant="contained"
+                loading={reviewMutation.isLoading}
+              >
                 Post Review
               </LoadingButton>
             </Stack>

@@ -5,7 +5,6 @@ import {
   Card,
   CardContent,
   Container,
-  Grid2,
   Stack,
   Typography,
   Divider,
@@ -43,7 +42,7 @@ export default function WhyUs() {
         my: { xs: 2, md: 0 },
       }}
     >
-      <Container>
+      <Container maxWidth="xl">
         <Card
           sx={{
             bgcolor: "background.paper",
@@ -51,10 +50,10 @@ export default function WhyUs() {
         >
           <CardContent>
             <Stack
-              direction={"row"}
+              direction={{ sm: "row", xs: "column" }}
               alignItems="center"
               justifyContent="space-between"
-              spacing={1}
+              spacing={{ md: 1, xs: 0 }}
             >
               {data.map((item, i) => (
                 <React.Fragment key={item.name}>
@@ -63,7 +62,7 @@ export default function WhyUs() {
                     alignItems="center"
                     justifyContent="center"
                     textAlign="center"
-                    gap={2}
+                    gap={{ md: 2, xs: 1 }}
                     sx={{
                       p: 1,
                     }}
@@ -71,8 +70,8 @@ export default function WhyUs() {
                     <Box
                       sx={{
                         position: "relative",
-                        height: 98,
-                        width: 98,
+                        height: { md: 98, sm: 64, xs: 56 },
+                        width: { md: 98, sm: 64, xs: 56 },
                         img: {
                           objectFit: "cover",
                         },
@@ -80,7 +79,7 @@ export default function WhyUs() {
                     >
                       <Image src={item.img} alt="Hero Img" fill sizes="100%" />
                     </Box>
-                    <Typography variant="subtitle1" color="text.primary">
+                    <Typography variant="subtitle2" color="text.primary">
                       {item.name}
                     </Typography>
                   </Stack>

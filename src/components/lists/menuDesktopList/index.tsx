@@ -1,10 +1,10 @@
-import React from 'react';
-import NextLink from 'next/link';
-import PropTypes from 'prop-types';
+import React from "react";
+import NextLink from "next/link";
+import PropTypes from "prop-types";
 // components
-import RootStyled from './styled';
+import RootStyled from "./styled";
 // material
-import { Box, ListSubheader, ListItem } from '@mui/material';
+import { Box, ListSubheader, ListItem } from "@mui/material";
 
 interface SubCategoryProp {
   name: string;
@@ -14,12 +14,12 @@ interface SubCategoryProp {
 IconBullet.propTypes = {
   type: PropTypes.string.isRequired,
 };
-function IconBullet({ type = 'item' }) {
+function IconBullet({ type = "item" }) {
   return (
-    <Box className='icon-bullet-main'>
+    <Box className="icon-bullet-main">
       <Box
-        component='span'
-        className={`icon-bullet-inner ${type !== 'item' && 'active'}`}
+        component="span"
+        className={`icon-bullet-inner ${type !== "item" && "active"}`}
       />
     </Box>
   );
@@ -37,23 +37,25 @@ export default function MenuDesktopList({ ...props }) {
         <ListSubheader
           disableSticky
           disableGutters
-          className='list-subheader'
+          className="list-subheader"
           onClick={() => {
             onClose();
           }}
           component={NextLink}
-          href={'/personalize/' + parent?.slug}>
+          href={"/personnaliser/" + parent?.slug}
+        >
           {parent?.name}
         </ListSubheader>
         {parent?.subCategories?.map((subCategory: SubCategoryProp) => (
           <React.Fragment key={Math.random()}>
             <ListItem
-              className='list-item'
+              className="list-item"
               onClick={() => {
                 onClose();
               }}
               component={NextLink}
-              href={`/personalize/${parent?.slug}/${subCategory?.slug}`}>
+              href={`/personnaliser/${parent?.slug}/${subCategory?.slug}`}
+            >
               <IconBullet />
 
               {subCategory?.name}

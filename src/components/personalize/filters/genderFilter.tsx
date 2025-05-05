@@ -1,5 +1,5 @@
-'use client';
-import React, { useCallback, useEffect, useState } from 'react';
+"use client";
+import React, { useCallback, useEffect, useState } from "react";
 // mui
 import {
   FormGroup,
@@ -10,25 +10,21 @@ import {
   Stack,
   Zoom,
   Box,
-} from '@mui/material';
+} from "@mui/material";
 // icons
 // next
-import { useRouter } from 'next-nprogress-bar';
-import { useSearchParams, usePathname } from 'next/navigation';
-
-interface GenderMainProps {
-  genders: string[];
-}
+import { useRouter } from "next-nprogress-bar";
+import { useSearchParams, usePathname } from "next/navigation";
 
 interface State {
   genders: string[];
   isLoaded: boolean;
 }
-
-const GenderMain: React.FC<GenderMainProps> = ({ genders }) => {
+const GenderMain = ({ ...props }) => {
+  const genders = props.genders;
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const gender = searchParams.get('gender');
+  const gender = searchParams.get("gender");
   const { push } = useRouter();
 
   const [state, setState] = useState<State>({
@@ -63,18 +59,18 @@ const GenderMain: React.FC<GenderMainProps> = ({ genders }) => {
 
     setState({ ...state, genders: updatedGenders });
 
-    const genderQuery = updatedGenders.join('_');
+    const genderQuery = updatedGenders.join("_");
     if (updatedGenders.length > 0) {
-      push(`${pathname}?${createQueryString('gender', genderQuery)}`);
+      push(`${pathname}?${createQueryString("gender", genderQuery)}`);
     } else {
-      push(`${pathname}?${deleteQueryString('gender')}`);
+      push(`${pathname}?${deleteQueryString("gender")}`);
     }
   };
 
   useEffect(() => {
     setState({
       ...state,
-      genders: gender ? gender.split('_') : [],
+      genders: gender ? gender.split("_") : [],
       isLoaded: true,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -82,68 +78,56 @@ const GenderMain: React.FC<GenderMainProps> = ({ genders }) => {
 
   return (
     <>
-      <Stack
-        direction='row'
-        justifyContent='space-between'>
+      <Stack direction="row" justifyContent="space-between">
         <Typography
-          variant='h6'
+          variant="h6"
           sx={{
             fontWeight: 600,
             mb: 1,
-            display: 'flex',
+            display: "flex",
             gap: 1,
           }}
-          color='text.primary'>
-          Genre{' '}
+          color="text.primary"
+        >
+          Genre{" "}
           {Boolean(state.genders.length) &&
             gender &&
-            `(${state.genders.length})`}
+            `( ${state.genders.length} )`}
         </Typography>
         <Zoom in={state.genders.length > 0}>
           <Button
             onClick={() => {
               setState({ ...state, genders: [] });
-              push(`${pathname}?${deleteQueryString('gender')}`);
+              push(`${pathname}?${deleteQueryString("gender")}`);
             }}
-            variant='outlined'
-            color='primary'
-            size='small'
-            sx={{ float: 'right' }}>
+            variant="outlined"
+            color="primary"
+            size="small"
+            sx={{ float: "right", boxShadow: "none" }}
+          >
             Reset
           </Button>
         </Zoom>
       </Stack>
-      <Box
-        sx={{
-          height: 2,
-          width: 50,
-          bgcolor: 'text.secondary',
-          borderRadius: 2,
-          mb: 2,
-        }}
-      />
+
       <Stack spacing={1}>
-        {genders.map((gender) => (
+        {genders.map((item: { gender: string; total: number | string }) => (
           <FormGroup
             key={Math.random()}
             sx={{
               ml: 1,
-            }}>
+            }}
+          >
             <FormControlLabel
-              sx={{
-                textTransform: 'capitalize',
-                '& .MuiButtonBase-root': {
-                  p: 0.4,
-                },
-              }}
+              sx={{ textTransform: "capitalize" }}
               control={
                 <Checkbox
-                  size='small'
-                  checked={state.genders.includes(gender)}
-                  onChange={(e) => handleChange(gender, e)}
+                  size="small"
+                  checked={state.genders.includes(item.gender)}
+                  onChange={(e) => handleChange(item.gender, e)}
                 />
               }
-              label={gender.toLowerCase()}
+              label={`${item.gender} ( ${item.total} )`} // French label
             />
           </FormGroup>
         ))}

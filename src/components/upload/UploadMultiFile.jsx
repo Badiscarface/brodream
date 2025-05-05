@@ -14,7 +14,7 @@ import {
   Skeleton,
   IconButton,
 } from "@mui/material";
-import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import { CloseRoundedIcon } from "react-icons/fa6";
 
 // react dropzone
 import { useDropzone } from "react-dropzone";

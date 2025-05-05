@@ -42,6 +42,8 @@ export const metadata: Metadata = {
   },
 };
 
+export const revalidate = 60;
+
 export default async function RootLayout({
   children,
 }: {
@@ -52,6 +54,7 @@ export default async function RootLayout({
     <html lang="en">
       <body>
         <Providers lang="en">
+          {/* <Box height={78} /> */}
           <Navbar data={categoriesData} />
           {children}
           <Footer />

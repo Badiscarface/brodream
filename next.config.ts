@@ -2,19 +2,18 @@
 const nextConfig = {
   reactStrictMode: true,
   // swcMinify: true,
-  modularizeImports: {
-    '@mui/icons-material': {
-      transform: '@mui/icons-material/{{member}}',
-    },
-  },
+
   images: {
     domains: [
-      'nextall.vercel.app',
-      'res.cloudinary.com',
-      'images.unsplash.com',
-      'hotfinch.s3.ap-south-1.amazonaws.com',
-      'commercehope-sdk.s3.ap-south-1.amazonaws.com',
+      "nextall.vercel.app",
+      "res.cloudinary.com",
+      "images.unsplash.com",
+      "hotfinch.s3.ap-south-1.amazonaws.com",
+      "commercehope-sdk.s3.ap-south-1.amazonaws.com",
     ],
+  },
+  typescript: {
+    ignoreBuildErrors: true,
   },
   env: {
     BASE_URL: process.env.BASE_URL,

@@ -1,4 +1,4 @@
-import http from './http';
+import http from "./http";
 
 export const getFilters = async () => {
   const { data } = await http.get(`/filters`);
@@ -20,8 +20,8 @@ export const getCategoryBySlug = async (category: string) => {
   const { data } = await http.get(`/categories/${category}`);
   return data;
 };
-export const getProductsByCategory = async (category: string) => {
-  const { data } = await http.get(`/category/products/${category}`);
+export const getProducts = async (params: string) => {
+  const { data } = await http.get(`/products${params}`);
   return data;
 };
 export const getCategorySlugs = async () => {
@@ -85,8 +85,13 @@ export const placeOrder = async ({ ...payload }) => {
   const { data } = await http.post(`/orders`, payload);
   return data;
 };
-export const getHomeBlogs = async () => {
+export const getBlogs = async () => {
   const { data } = await http.get(`/blogs`);
+  return data;
+};
+
+export const getHomeBlogs = async () => {
+  const { data } = await http.get(`/home/blogs`);
   return data;
 };
 export const getBlogBySlug = async (slug: string) => {

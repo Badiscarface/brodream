@@ -1,13 +1,13 @@
-import React from 'react';
+import React from "react";
 // component
-import CheckoutMain from '@/components/order/mainCheckout';
+import CheckoutMain from "@/components/order/mainCheckout";
 // mui
-import { Container } from '@mui/material';
+import { Container } from "@mui/material";
 
 export default function page() {
   return (
     <>
-      <Container>
+      <Container maxWidth="xl">
         <CheckoutMain />
       </Container>
     </>

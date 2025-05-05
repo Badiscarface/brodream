@@ -1,12 +1,13 @@
-import React from 'react';
+import React from "react";
 // mui
-import Categories from '@/components/personalize/categories';
-import HeaderBreadcrumbs from '@/components/headerBreadcrumbs';
-import * as api from '@/services';
+import ProductsMain from "@/components/personalize/index";
+import { Container } from "@mui/material";
+import HeaderBreadcrumbs from "@/components/headerBreadcrumbs";
+import * as api from "@/services";
 // const HeaderBreadcrumbs = dynamic(
 //   () => import('')
 // );
-export const dynamic = 'error';
+export const dynamic = "error";
 
 export const revalidate = 10;
 
@@ -45,29 +46,33 @@ export default async function Page({
 }) {
   const category = (await params).category;
   const { data: categoryData } = await api.getCategoryTitle(category);
-  const data = await api.getProductsByCategory(category);
+  const data = await api.getHomeCategories();
   const filters = await api.getFilters();
+
   return (
-    <>
+    <Container maxWidth="xl">
       <HeaderBreadcrumbs
+        heading={categoryData?.name}
         links={[
           {
-            name: 'Maison',
-            href: '/',
+            name: "Maison",
+            href: "/",
           },
           {
-            name: 'personnaliser',
-            href: '/personalize',
+            name: "Personnaliser",
+            href: "/personnaliser",
           },
           {
             name: categoryData?.name,
           },
         ]}
       />
-      <Categories
-        product={data?.data}
+      <ProductsMain
+        isOnlyProducts
+        category={category}
+        categories={data?.data}
         filters={filters?.data}
       />
-    </>
+    </Container>
   );
 }

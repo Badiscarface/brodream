@@ -1,21 +1,25 @@
-'use client';
-import React from 'react';
-import { toast } from 'react-hot-toast';
+"use client";
+import React from "react";
+import { toast } from "react-hot-toast";
 
-// mui
-import { FormControl, TextField, Stack } from '@mui/material';
-import LoadingButton from '@/components/LoadingButton';
+// MUI
+import { FormControl, TextField, Stack } from "@mui/material";
+import LoadingButton from "@/components/LoadingButton";
 
-// formik
-import { Form, FormikProvider, useFormik } from 'formik';
+// Formik
+import { Form, FormikProvider, useFormik } from "formik";
 
-// api
-import * as api from '@/services';
-import { useMutation } from 'react-query';
+// TanStack Query
+import { useMutation } from "@tanstack/react-query";
 
-interface NewsLetterProp {
-  email?: string;
+// API
+import * as api from "@/services";
+
+interface NewsletterResponse {
   message: string;
+}
+
+interface NewsletterError {
   response: {
     data: {
       message: string;
@@ -24,38 +28,38 @@ interface NewsLetterProp {
 }
 
 export default function NewsLetter() {
-  const [loading, setloading] = React.useState(false);
-
   const formik = useFormik({
     initialValues: {
-      email: '',
+      email: "",
     },
     onSubmit: async (values) => {
-      if (
-        values.email
-          .toLowerCase()
-          .match(
-            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-          )
-      ) {
-        setloading(true);
-        mutate(values);
-      } else {
-        toast.error('Invalid email!');
-        console.log('Invalid email!');
+      const isValidEmail = values.email
+        .toLowerCase()
+        .match(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
+
+      if (!isValidEmail) {
+        toast.error("Invalid email!");
+        return;
       }
+
+      mutate(values);
     },
   });
 
-  const { mutate } = useMutation(api.sendNewsletter, {
-    onSuccess: (data: NewsLetterProp) => {
+  const { mutate, isLoading } = useMutation<
+    NewsletterResponse,
+    NewsletterError,
+    { email: string }
+  >({
+    mutationFn: api.sendNewsletter,
+    onSuccess: (data) => {
       toast.success(data.message);
-      setloading(false);
       formik.resetForm();
     },
-    onError: (err: NewsLetterProp) => {
-      setloading(false);
-      toast.error(err.response.data.message);
+    onError: (err) => {
+      toast.error(err.response?.data?.message || "An error occurred");
     },
   });
 
@@ -63,35 +67,27 @@ export default function NewsLetter() {
 
   return (
     <FormikProvider value={formik}>
-      <Form
-        noValidate
-        autoComplete='off'
-        onSubmit={handleSubmit}>
-        <Stack
-          sx={{}}
-          direction='row'
-          alignItems='center'
-          spacing={2}>
-          <FormControl
-            fullWidth
-            variant='outlined'>
+      <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
+        <Stack direction="row" alignItems="center" spacing={2}>
+          <FormControl fullWidth variant="outlined">
             <TextField
-              placeholder='Entrez votre email'
-              {...getFieldProps('email')}
+              placeholder="Entrez votre email"
+              {...getFieldProps("email")}
               sx={{
-                '& .MuiInputBase-root': {
+                "& .MuiInputBase-root": {
                   bgcolor: (theme) => theme.palette.background.paper,
                 },
               }}
             />
           </FormControl>
           <LoadingButton
-            variant='contained'
-            size='large'
-            color='primary'
-            type='submit'
-            loading={loading}
-            sx={{ marginTop: 8, paddingX: 4, minHeight: 56 }}>
+            variant="contained"
+            size="large"
+            color="primary"
+            type="submit"
+            loading={isLoading}
+            sx={{ marginTop: 8, paddingX: 4, minHeight: 56 }}
+          >
             S&apos;abonner
           </LoadingButton>
         </Stack>

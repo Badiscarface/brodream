@@ -16,13 +16,12 @@ import { useRouter } from "next-nprogress-bar";
 
 export default function HomeCategoryCard({ ...props }) {
   const { item } = props;
-  console.log(item);
 
   const router = useRouter();
   return (
     <Card>
       <CardActionArea
-        onClick={() => router.push(`/personalize/${item.slug}`)}
+        onClick={() => router.push(`/personnaliser/${item.slug}`)}
         sx={{
           p: 1.5,
         }}

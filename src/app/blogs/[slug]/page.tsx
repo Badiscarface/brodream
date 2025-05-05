@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 // mui
-import { Container } from '@mui/material';
+import { Container } from "@mui/material";
 // components
-import BlogDetail from '@/components/blogs/detail';
+import BlogDetail from "@/components/blogs/detail";
 // api
-import * as api from '@/services';
+import * as api from "@/services";
 
 type Params = Promise<{ slug: string }>;
 export default async function Page({ params }: { params: Params }) {
@@ -12,7 +12,7 @@ export default async function Page({ params }: { params: Params }) {
   const data = await api.getBlogBySlug(slug);
   return (
     <>
-      <Container>
+      <Container maxWidth="xl">
         <BlogDetail data={data} />
       </Container>
     </>

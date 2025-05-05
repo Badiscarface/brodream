@@ -78,7 +78,6 @@ export default function ThemeRegistry({ children }: ThemeRegistryProps) {
     key: dir === "rtl" ? "muirtl" : "css",
     stylisPlugins: dir === "rtl" ? [rtlPlugin] : [],
   });
-  console.log(mode, "hello");
 
   const customTheme = () =>
     createTheme(
@@ -86,7 +85,7 @@ export default function ThemeRegistry({ children }: ThemeRegistryProps) {
         palette: { ...palette[mode], mode },
         direction: dir,
         typography,
-        shadows: (mode !== "dark" ? shadows.dark : shadows.light) as Shadows,
+        shadows: (mode !== "dark" ? shadows.light : shadows.dark) as Shadows,
         shape,
         breakpoints,
         customShadows: (mode !== "dark"

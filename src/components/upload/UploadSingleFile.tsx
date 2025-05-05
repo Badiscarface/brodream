@@ -1,37 +1,37 @@
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 // mui
-import { alpha, styled } from '@mui/material/styles';
-import { Paper, Box, Typography } from '@mui/material';
+import { alpha, styled } from "@mui/material/styles";
+import { Paper, Box, Stack, Typography } from "@mui/material";
 
 // component
-import UploadIllustration from '@/illustrations/upload';
+import UploadIllustration from "@/illustrations/upload";
 
 // react dropzone
-import { useDropzone } from 'react-dropzone';
+import { useDropzone } from "react-dropzone";
 
 // utils
-import { fData } from '@/utils/formatNumber';
+import { fData } from "@/utils/formatNumber";
 
-const DropZoneStyle = styled('div')(({ theme }) => ({
-  outline: 'none',
-  display: 'flex',
-  overflow: 'hidden',
-  textAlign: 'center',
-  position: 'relative',
-  alignItems: 'center',
-  flexDirection: 'column',
-  justifyContent: 'center',
+const DropZoneStyle = styled("div")(({ theme }) => ({
+  outline: "none",
+  display: "flex",
+  overflow: "hidden",
+  textAlign: "center",
+  position: "relative",
+  alignItems: "center",
+  flexDirection: "column",
+  justifyContent: "center",
   padding: theme.spacing(5, 0),
   borderRadius: theme.shape.borderRadius,
-  transition: theme.transitions.create('padding'),
+  transition: theme.transitions.create("padding"),
   backgroundColor: theme.palette.background.default,
-  border: `1px dashed ${theme.palette.grey[500]}`,
-  '&:hover': {
+  border: `1px solid rgba(0, 0, 0, 0.23)`,
+  "&:hover": {
     opacity: 0.72,
-    cursor: 'pointer',
+    cursor: "pointer",
   },
-  [theme.breakpoints.up('md')]: { textAlign: 'left', flexDirection: 'row' },
+  [theme.breakpoints.up("md")]: { textAlign: "left", flexDirection: "row" },
 }));
 
 // ----------------------------------------------------------------------
@@ -63,30 +63,24 @@ export default function UploadSingleFile({ ...props }) {
 
   const ShowRejectionItems = () => (
     <Paper
-      variant='outlined'
+      variant="outlined"
       sx={{
         py: 1,
         px: 2,
         mt: 3,
-        borderColor: 'error.light',
+        borderColor: "error.light",
         bgcolor: (theme) => alpha(theme.palette.error.main, 0.08),
-      }}>
+      }}
+    >
       {fileRejections.map(({ file, errors }) => {
         const { path, size } = file;
         return (
-          <Box
-            key={path}
-            sx={{ my: 1 }}>
-            <Typography
-              variant='subtitle2'
-              noWrap>
+          <Box key={path} sx={{ my: 1 }}>
+            <Typography variant="subtitle2" noWrap>
               {path} - {fData(size)}
             </Typography>
             {errors.map((e) => (
-              <Typography
-                key={e.code}
-                variant='caption'
-                component='p'>
+              <Typography key={e.code} variant="caption" component="p">
                 - {e.message}
               </Typography>
             ))}
@@ -97,76 +91,74 @@ export default function UploadSingleFile({ ...props }) {
   );
 
   return (
-    <Box sx={{ width: '100%', ...sx }}>
+    <Box sx={{ width: "100%", ...sx }}>
       <DropZoneStyle
         {...getRootProps()}
         sx={{
           ...(isDragActive && { opacity: 0.72 }),
           ...((isDragReject || error) && {
-            color: 'error.main',
-            borderColor: 'error.light',
-            bgcolor: 'error.lighter',
+            color: "error.main",
+            borderColor: "error.light",
+            bgcolor: "error.lighter",
           }),
-          ...(other.category && { padding: '8px 0' }),
-        }}>
+          ...(other.category && { padding: "8px 0" }),
+        }}
+      >
         {loading && (
           <Box
             sx={{
-              position: 'absolute',
+              position: "absolute",
               top: 0,
               left: 0,
               width: loading ? `${loading}%` : 0,
-              height: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
               bgcolor: (theme) => alpha(theme.palette.primary.main, 0.8),
               zIndex: 9999,
-            }}>
-            <Typography
-              variant='h6'
-              color='text.primary'>
+            }}
+          >
+            <Typography variant="h6" color="text.primary">
               {loading}%
             </Typography>
           </Box>
         )}
         <input {...getInputProps()} />
         {!other.category && <UploadIllustration sx={{ width: 220 }} />}
-        <Box sx={{ p: 2, ml: { md: 2 } }}>
-          <Typography variant={other.category ? 'subtitle1' : 'h5'}>
-            {'Drop or Select image'}
+
+        <Stack gap={1} textAlign={"center"} sx={{ pb: 2 }}>
+          <UploadIllustration sx={{ width: 160, mx: "auto" }} />
+          <Typography variant={other.category ? "subtitle1" : "h5"}>
+            Déposez ou sélectionnez une image
           </Typography>
-          {other.category ? (
-            <UploadIllustration sx={{ width: 160 }} />
-          ) : (
+
+          <Typography variant="body2" sx={{ color: "text.secondary" }}>
+            Glissez-déposez une image ici ou cliquez&nbsp;
             <Typography
-              variant='body2'
-              sx={{ color: 'text.secondary' }}>
-              {'Drop image here or Click'}&nbsp;
-              <Typography
-                variant='body2'
-                component='span'
-                sx={{ color: 'primary.main', textDecoration: 'underline' }}>
-                {'Browse'}
-              </Typography>
-              &nbsp;{'Thorough your machine'}
+              variant="body2"
+              component="span"
+              sx={{ color: "primary.main", textDecoration: "underline" }}
+            >
+              Parcourir
             </Typography>
-          )}
-        </Box>
+            &nbsp;depuis votre appareil
+          </Typography>
+        </Stack>
 
         {file && (
           <Box
-            component='img'
-            alt='file preview'
+            component="img"
+            alt="aperçu du fichier"
             src={!file.preview ? file.url : file.preview}
             sx={{
               top: 8,
               borderRadius: 1,
-              objectFit: 'contain',
-              position: 'absolute',
-              width: 'calc(100% - 16px)',
-              height: 'calc(100% - 16px)',
-              backgroundColor: 'background.paper',
+              objectFit: "contain",
+              position: "absolute",
+              width: "calc(100% - 16px)",
+              height: "calc(100% - 16px)",
+              backgroundColor: "background.paper",
             }}
           />
         )}

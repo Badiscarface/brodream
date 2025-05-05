@@ -1,9 +1,9 @@
-import React from 'react';
-import * as api from '@/services';
+import React from "react";
+import * as api from "@/services";
 
-import HeaderBreadcrumbs from '@/components/headerBreadcrumbs';
-import { Box } from '@mui/material';
-import ProductDetailMain from '@/components/product';
+import HeaderBreadcrumbs from "@/components/headerBreadcrumbs";
+import { Container } from "@mui/material";
+import ProductDetailMain from "@/components/product";
 // import config from '@/components/dialog/config.json';
 
 type Props = {
@@ -29,9 +29,9 @@ export async function generateMetadata({
   const { data: response } = await api.getProductBySlug(slug);
   const images = response.images;
   return {
-    title: 'Brodream Product Detail',
-    description: 'Brodream Product Detail description',
-    keywords: 'Brodream Product Detail',
+    title: "Brodream Product Detail",
+    description: "Brodream Product Detail description",
+    keywords: "Brodream Product Detail",
     openGraph: {
       images: images ? images?.map((v: { url: string }) => v.url) : [],
     },
@@ -45,17 +45,17 @@ export default async function ProductDetail({ params }: Props) {
   const reviews = await api.getReviewsBySlug(data.id);
 
   return (
-    <Box>
+    <Container maxWidth="xl">
       <HeaderBreadcrumbs
-        heading='Détails du produit'
+        heading={data?.name}
         links={[
           {
-            name: 'Maison',
-            href: '/',
+            name: "Maison",
+            href: "/",
           },
           {
-            name: 'personnaliser',
-            href: '/personalize',
+            name: "Personnaliser",
+            href: "/personnaliser",
           },
           {
             name: data?.name,
@@ -70,6 +70,6 @@ export default async function ProductDetail({ params }: Props) {
         category={category}
         review={reviews}
       />
-    </Box>
+    </Container>
   );
 }

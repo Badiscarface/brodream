@@ -1,20 +1,18 @@
 // react
-'use client';
-import PropTypes from 'prop-types';
-import { useState } from 'react';
+"use client";
+import PropTypes from "prop-types";
+import { useState } from "react";
 // next
-import BlurImage from '@/components/blurImage';
+import BlurImage from "@/components/blurImage";
 // import { toast } from 'react-hot-toast';
 // mui
-import { Box, Stack, useMediaQuery } from '@mui/material';
-// api
-// import * as api from 'src/services';
-// import { useMutation } from 'react-query';
+import { Box, Stack, useMediaQuery } from "@mui/material";
 // framer motion
-import { motion, AnimatePresence } from 'framer-motion';
-// import { useRouter, useSearchParams } from 'next/navigation';
+import { motion, AnimatePresence } from "framer-motion";
 // styles override
-import RootStyled from './styled';
+import RootStyled from "./styled";
+import FullscreenZoom from "@/components/fullscreenZoom";
+import { useRef } from "react";
 
 const variants = {
   enter: (direction: number) => {
@@ -59,31 +57,34 @@ ProductDetailsCarousel.propTypes = {
 };
 
 function ProductDetailsCarousel({ ...props }) {
-  const { item } = props;
+  const { item, onClick } = props;
 
   return (
-    <div className='slide-wrapper'>
+    <div className="slide-wrapper" onClick={onClick}>
       {item && (
         <BlurImage
           priority
           fill
-          objectFit='cover'
-          sizes='50%'
+          objectFit="cover"
+          sizes="50%"
           src={item?.url || item?.src}
-          alt='hero-carousel'
+          alt="hero-carousel"
         />
       )}
-      <Box className='bg-overlay' />
+      <Box className="bg-overlay" />
     </div>
   );
 }
 
 export default function CarouselAnimation({ ...props }) {
   const { product, selectImage, data: others } = props;
+  const dragging = useRef(false);
+
   const id = others?.id;
   const images = selectImage?.images || product.images;
+  const [open, setOpen] = useState<string | boolean>(false);
 
-  const isMobile = useMediaQuery('(max-width:600px)');
+  const isMobile = useMediaQuery("(max-width:600px)");
   const [[page, direction], setPage] = useState([0, 0]);
   const imageIndex = Math.abs(page % images?.length);
 
@@ -92,30 +93,30 @@ export default function CarouselAnimation({ ...props }) {
   };
   return (
     <RootStyled>
-      <AnimatePresence
-        initial={false}
-        custom={direction}>
+      <AnimatePresence initial={false} custom={direction}>
         <motion.div
-          // className='motion-dev'
           style={{
-            position: 'absolute',
-            width: '100%',
-            overflow: 'hidden',
+            position: "absolute",
+            width: "100%",
+            overflow: "hidden",
             top: 0,
           }}
           key={page}
           custom={direction}
           variants={variants}
-          initial='enter'
-          animate='center'
-          exit='exit'
+          initial="enter"
+          animate="center"
+          exit="exit"
           transition={{
-            x: { type: 'spring', stiffness: 300, damping: 30 },
+            x: { type: "spring", stiffness: 300, damping: 30 },
             opacity: { duration: 0.2 },
           }}
-          drag='x'
+          drag="x"
           dragConstraints={{ left: 0, right: 0 }}
           dragElastic={1}
+          onDragStart={() => {
+            dragging.current = true;
+          }}
           onDragEnd={(e, { offset, velocity }) => {
             const swipe = swipePower(offset.x, velocity.x);
             if (swipe < -swipeConfidenceThreshold) {
@@ -123,8 +124,19 @@ export default function CarouselAnimation({ ...props }) {
             } else if (swipe > swipeConfidenceThreshold) {
               paginate(-1);
             }
-          }}>
+
+            // Delay resetting dragging to false to prevent accidental click
+            setTimeout(() => {
+              dragging.current = false;
+            }, 100);
+          }}
+        >
           <ProductDetailsCarousel
+            onClick={() => {
+              if (!dragging.current) {
+                setOpen(images[imageIndex].url || images[imageIndex].src);
+              }
+            }}
             item={images[imageIndex]}
             index={images[imageIndex]}
             activeStep={imageIndex}
@@ -136,28 +148,36 @@ export default function CarouselAnimation({ ...props }) {
         </motion.div>
       </AnimatePresence>
       <Stack
-        direction='row'
-        justifyContent={images.length < 6 ? 'center' : 'left'}
+        direction="row"
+        justifyContent={images.length < 6 ? "center" : "left"}
         spacing={1}
-        className='controls-wrapper'>
+        className="controls-wrapper"
+      >
         {images?.map((item: Image, i: number) => (
           <Box
             key={Math.random()}
-            className={`controls-button ${imageIndex === i ? 'active' : ''}`}
+            className={`controls-button ${imageIndex === i ? "active" : ""}`}
             onClick={() => {
               setPage([i, i]);
-            }}>
+            }}
+          >
             <BlurImage
               priority
               fill
-              objectFit='cover'
-              sizes='14vw'
-              src={item?.src || item?.url}
-              alt='hero-carousel'
+              objectFit="cover"
+              sizes="14vw"
+              src={item?.url}
+              alt="hero-carousel"
             />
           </Box>
         ))}
       </Stack>
+      <FullscreenZoom
+        open={open}
+        src={open}
+        alt={"nasdasd"}
+        onClose={() => setOpen(false)}
+      />
     </RootStyled>
   );
 }

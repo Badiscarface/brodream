@@ -1,125 +1,130 @@
-'use client';
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import { useRouter } from 'next-nprogress-bar';
-// mui
-import { alpha } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import ListItemText from '@mui/material/ListItemText';
-import Typography from '@mui/material/Typography';
-// import SearchIcon from '@mui/icons-material/Search';
-import TextField from '@mui/material/TextField';
-import Skeleton from '@mui/material/Skeleton';
-import { InputAdornment, Stack, Button } from '@mui/material';
-import MenuList from '@mui/material/MenuList';
-import MenuItem from '@mui/material/MenuItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import CircularProgress from '@mui/material/CircularProgress';
-import Divider from '@mui/material/Divider';
-// icons
-import { FiSearch } from 'react-icons/fi';
+"use client";
+import * as React from "react";
+import { useRouter } from "next-nprogress-bar";
+import {
+  alpha,
+  Box,
+  TextField,
+  Skeleton,
+  InputAdornment,
+  Stack,
+  Button,
+  MenuList,
+  MenuItem,
+  ListItemText,
+  ListItemIcon,
+  Divider,
+  Typography,
+  CircularProgress,
+} from "@mui/material";
+import { FiSearch } from "react-icons/fi";
+import NoDataFound from "@/illustrations/dataNotFound";
+import BlurImageAvatar from "@/components/avatar";
+import { useMutation } from "@tanstack/react-query";
+import * as api from "@/services";
+import { useCurrencyConvert } from "@/hooks/convertCurrency";
+import { useCurrencyFormatter } from "@/hooks/formatCurrency";
 
-// components
-import NoDataFound from '@/illustrations/dataNotFound';
-import { useMutation } from 'react-query';
-import BlurImageAvatar from '@/components/avatar';
-// api
-import * as api from '@/services';
-// hooks
-import { useCurrencyConvert } from '@/hooks/convertCurrency';
-import { useCurrencyFormatter } from '@/hooks/formatCurrency';
+// =================== Types ===================
 
-Search.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  mobile: PropTypes.bool.isRequired,
-};
+interface Product {
+  id: string;
+  slug: string;
+  name: string;
+  priceSale: number;
+  category?: {
+    name: string;
+  };
+  images: {
+    url: string;
+  }[];
+}
 
 interface FilterProps {
   id: string;
 }
 
-export default function Search({ ...props }) {
-  const { onClose, mobile, multiSelect, selectedProducts, handleSave } = props;
-  const [state, setstate] = React.useState({
-    products: [],
-    selected: selectedProducts || [],
-    initialized: false,
-    category: '',
-  });
-  const cCurrency = useCurrencyConvert();
-  const fCurrency = useCurrencyFormatter();
-  const router = useRouter();
-  const [search, setSearch] = React.useState('');
+interface SearchProps {
+  onClose: (selected?: any) => void;
+}
 
-  // const { data: filters } = useQuery(['get-search-filters'], () =>
-  //   api.getSearchFilters()
-  // );
-  const { mutate, isLoading } = useMutation('search', api.search, {
+// =================== Component ===================
+const useSearchProducts = (setState: any) => {
+  return useMutation({
+    mutationFn: api.search,
     onSuccess: (data) => {
-      // setstate({ ...state, ...data });
-      setstate({ ...state, products: data?.data });
+      setState((prev: any) => ({ ...prev, products: data?.data || [] }));
     },
   });
+};
+export default function Search({ onClose }: SearchProps) {
+  const [state, setState] = React.useState<{
+    products: Product[];
+    selected: FilterProps[];
+    initialized: boolean;
+    category: string;
+  }>({
+    products: [],
+    selected: [],
+    initialized: false,
+    category: "",
+  });
 
+  const [search, setSearch] = React.useState("");
   const [focus, setFocus] = React.useState(true);
 
-  const handleListItemClick = (prop: FilterProps) => {
-    if (multiSelect) {
-      const matched = state.selected.filter(
-        (v: FilterProps) => prop.id === v.id
-      );
-      const notMatched = state.selected.filter(
-        (v: FilterProps) => prop.id !== v.id
-      );
-      if (Boolean(matched.length)) {
-        setstate({ ...state, selected: notMatched });
-      } else {
-        setstate({ ...state, selected: [...state.selected, prop] });
-      }
+  const router = useRouter();
+  const cCurrency = useCurrencyConvert();
+  const fCurrency = useCurrencyFormatter();
+  const { mutate, isPending: isLoading } = useSearchProducts(setState); // 'isPending' is the new name for 'isLoading'
+
+  const handleListItemClick = (product: Product | string) => {
+    if (multiSelect && typeof product !== "string") {
+      const exists = state.selected.some((v) => v.id === product.id);
+      const updatedSelected = exists
+        ? state.selected.filter((v) => v.id !== product.id)
+        : [...state.selected, { id: product.id }];
+      setState((prev) => ({ ...prev, selected: updatedSelected }));
     } else {
-      if (!mobile) {
-        onClose(prop);
+      if (!mobile && typeof product === "string") {
+        onClose?.();
       }
-      router.push(`/product/${prop}`);
+      router.push(
+        `/product/${typeof product === "string" ? product : product.slug}`
+      );
     }
   };
-  const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
-    if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+
+  const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "ArrowUp" || e.key === "ArrowDown") {
       setFocus(false);
     }
   };
+
   React.useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      mutate(search);
+    const delayDebounce = setTimeout(() => {
+      if (search?.trim()) mutate(search);
     }, 1000);
-
-    return () => clearTimeout(delayDebounceFn);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search]);
+    return () => clearTimeout(delayDebounce);
+  }, [search, mutate]);
 
   return (
     <>
       <TextField
-        id='standard-basic'
-        variant='standard'
-        placeholder='Rechercher des produits'
+        variant="standard"
+        placeholder="Rechercher des produits"
         onFocus={() => setFocus(true)}
         onKeyDown={onKeyDown}
         onChange={(e) => {
           setSearch(e.target.value);
-          setstate({ ...state, initialized: true });
+          setState((prev) => ({ ...prev, initialized: true }));
         }}
         fullWidth
         InputProps={{
           startAdornment: (
-            <InputAdornment
-              position='start'
-              sx={{ justifyContent: 'center' }}>
+            <InputAdornment position="start">
               {isLoading ? (
-                <CircularProgress
-                  sx={{ width: '24px !important', height: '24px !important' }}
-                />
+                <CircularProgress size={24} />
               ) : (
                 <FiSearch size={20} />
               )}
@@ -127,190 +132,115 @@ export default function Search({ ...props }) {
           ),
         }}
         sx={{
-          ...(mobile && {
-            position: 'sticky',
-            top: 0,
-            zIndex: 1,
-            bgcolor: 'background.paper',
-          }),
-          '& .MuiInput-root': {
+          "& .MuiInput-root": {
             height: { lg: 72, md: 72, sm: 72, xs: 56 },
-          },
-          '& .MuiInputAdornment-root': {
-            width: 100,
-            mr: 0,
-            svg: {
-              mx: 'auto',
-              color: 'primary.main',
-            },
           },
         }}
       />
-      <Divider />
-      <Box className='scroll-main'>
-        <Box sx={{ height: mobile ? 'auto' : '342px', overflow: 'auto' }}>
-          {state.initialized &&
-            !isLoading &&
-            !Boolean(state.products.length) && (
-              <>
-                <Stack
-                  justifyContent='center'
-                  alignItems='center'
-                  sx={{
-                    svg: {
-                      width: 300,
-                      height: 380,
-                    },
-                  }}>
-                  <NoDataFound className='svg' />
-                </Stack>
-              </>
-            )}
 
-          {!isLoading && !Boolean(state.products.length) ? (
-            ''
-          ) : (
-            <>
-              <MenuList
-                sx={{
-                  pt: 0,
-                  mt: 1,
-                  overflow: 'auto',
-                  px: 1,
-                  li: {
-                    borderRadius: '8px',
-                    border: `1px solid transparent`,
-                    '&:hover, &.Mui-focusVisible, &.Mui-selected ': {
-                      border: (theme) =>
-                        `1px solid ${theme.palette.primary.main}`,
-                      bgcolor: (theme) =>
-                        alpha(theme.palette.primary.main, 0.16),
-                      h6: {
-                        color: 'primary.main',
-                      },
-                    },
-                    '&.active': {
-                      border: (theme) =>
-                        `1px solid ${theme.palette.primary.main}`,
-                      bgcolor: (theme) =>
-                        alpha(theme.palette.primary.main, 0.16),
-                      h6: {
-                        color: 'primary.main',
-                      },
-                    },
+      <Divider />
+
+      <Box className="scroll-main">
+        <Box sx={{ height: "342px", overflow: "auto" }}>
+          {state.initialized && !isLoading && state.products.length === 0 && (
+            <Stack justifyContent="center" alignItems="center">
+              <NoDataFound className="svg" />
+            </Stack>
+          )}
+
+          {(isLoading || state.products.length > 0) && (
+            <MenuList
+              autoFocusItem={!focus}
+              sx={{
+                pt: 0,
+                mt: 1,
+                overflow: "auto",
+                px: 1,
+                li: {
+                  borderRadius: "8px",
+                  border: "1px solid transparent",
+                  "&:hover, &.Mui-focusVisible, &.Mui-selected, &.active": {
+                    border: (theme) =>
+                      `1px solid ${theme.palette.primary.main}`,
+                    bgcolor: (theme) => alpha(theme.palette.primary.main, 0.16),
+                    h6: { color: "primary.main" },
                   },
-                }}
-                autoFocusItem={!focus}>
-                {(isLoading
-                  ? Array.from(new Array(mobile ? 6 : 8))
-                  : state.products
-                ).map((product) => (
-                  <MenuItem
-                    key={Math.random()}
-                    className={
-                      Boolean(
-                        state.selected.filter(
-                          (v: FilterProps) => v.id === product?.id
-                        )?.length
-                      )
-                        ? 'active'
-                        : ''
-                    }
-                    onClick={() =>
-                      handleListItemClick(multiSelect ? product : product?.slug)
-                    }>
-                    <ListItemIcon>
-                      {isLoading ? (
-                        <Skeleton
-                          variant='circular'
-                          width={40}
-                          height={40}
-                        />
-                      ) : (
-                        <BlurImageAvatar
-                          alt={product.name}
-                          src={product.images[0].url}
-                          priority
-                          layout='fill'
-                          objectFit='cover'
-                        />
-                      )}
-                    </ListItemIcon>
-                    <ListItemText>
-                      <Stack
-                        direction='row'
-                        gap={1}
-                        alignItems={'center'}
-                        justifyContent={'space-between'}>
-                        <div>
-                          <Typography
-                            variant='subtitle1'
-                            color='text.primary'
-                            noWrap>
-                            {isLoading ? (
-                              <Skeleton
-                                variant='text'
-                                width='200px'
-                              />
-                            ) : (
-                              product.name
-                            )}
-                          </Typography>
-                          <Typography
-                            variant='body2'
-                            color='text.secondary'
-                            noWrap>
-                            {isLoading ? (
-                              <Skeleton
-                                variant='text'
-                                width='200px'
-                              />
-                            ) : (
-                              product?.category?.name
-                            )}
-                          </Typography>
-                        </div>
+                },
+              }}
+            >
+              {(isLoading
+                ? Array.from(new Array(8)).map((_, index) => ({
+                    id: `skeleton-${index}`,
+                  }))
+                : state.products
+              ).map((product: any) => (
+                <MenuItem
+                  key={product.id}
+                  className={
+                    state.selected.some((v) => v.id === product.id)
+                      ? "active"
+                      : ""
+                  }
+                  onClick={() => handleListItemClick(product.slug)}
+                >
+                  <ListItemIcon>
+                    {isLoading ? (
+                      <Skeleton variant="circular" width={40} height={40} />
+                    ) : (
+                      <BlurImageAvatar
+                        alt={product.name}
+                        src={product.images?.[0]?.url}
+                        priority
+                        layout="fill"
+                        objectFit="cover"
+                      />
+                    )}
+                  </ListItemIcon>
+                  <ListItemText>
+                    <Stack
+                      direction="row"
+                      gap={1}
+                      alignItems="center"
+                      justifyContent="space-between"
+                    >
+                      <div>
                         <Typography
-                          variant='subtitle2'
-                          color='text.primary'
-                          noWrap>
+                          variant="subtitle1"
+                          color="text.primary"
+                          noWrap
+                        >
+                          {isLoading ? <Skeleton width={200} /> : product.name}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          noWrap
+                        >
                           {isLoading ? (
-                            <Skeleton
-                              variant='text'
-                              width='100px'
-                            />
+                            <Skeleton width={200} />
                           ) : (
-                            fCurrency(cCurrency(product.priceSale))
+                            product?.category?.name
                           )}
                         </Typography>
-                      </Stack>
-                    </ListItemText>
-                  </MenuItem>
-                ))}
-              </MenuList>
-            </>
+                      </div>
+                      <Typography
+                        variant="subtitle2"
+                        color="text.primary"
+                        noWrap
+                      >
+                        {isLoading ? (
+                          <Skeleton width={100} />
+                        ) : (
+                          fCurrency(cCurrency(product.priceSale))
+                        )}
+                      </Typography>
+                    </Stack>
+                  </ListItemText>
+                </MenuItem>
+              ))}
+            </MenuList>
           )}
-        </Box>{' '}
-        {multiSelect && (
-          <Stack
-            gap={1}
-            direction={'row'}
-            p={1}
-            justifyContent={'end'}>
-            <Button
-              variant='outlined'
-              color='primary'
-              onClick={() => handleSave(selectedProducts)}>
-              Cancel
-            </Button>
-            <Button
-              variant='contained'
-              color='primary'
-              onClick={() => handleSave(state.selected)}>
-              Save
-            </Button>
-          </Stack>
-        )}
+        </Box>
       </Box>
     </>
   );

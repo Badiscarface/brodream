@@ -1,7 +1,7 @@
-'use client';
-import React from 'react';
-import PropTypes from 'prop-types';
-import Image from 'next/image';
+"use client";
+import React from "react";
+import PropTypes from "prop-types";
+import Image from "next/image";
 
 // mui
 import {
@@ -13,24 +13,21 @@ import {
   Typography,
   Skeleton,
   IconButton,
-} from '@mui/material';
-import { MdDeleteOutline } from 'react-icons/md';
-import EmptyCart from '@/illustrations/emptyCart';
+} from "@mui/material";
+import { IoClose } from "react-icons/io5";
+import EmptyCart from "@/illustrations/emptyCart";
 // hooks
-import { useCurrencyConvert } from '@/hooks/convertCurrency';
-import { useCurrencyFormatter } from '@/hooks/formatCurrency';
+import { useCurrencyFormatter } from "@/hooks/formatCurrency";
 
 export default function CheckoutCard({ ...props }) {
   const { cart, loading, onDelete, isEmptyCart } = props;
-  const cCurrency = useCurrencyConvert();
+
   const fCurrency = useCurrencyFormatter();
   return (
     <Card>
       <CardContent>
-        <Typography
-          variant='h4'
-          mb={1}>
-          Cart {cart.length > 1 ? 'Items' : 'Item'}
+        <Typography variant="h4" mb={1}>
+          Panier {cart.length > 1 ? "Articles" : "Article"}
         </Typography>
         {isEmptyCart ? (
           <EmptyCart />
@@ -39,120 +36,106 @@ export default function CheckoutCard({ ...props }) {
             {cart.map((value: CartItem, index: number, array: []) => (
               <React.Fragment key={Math.random()}>
                 <Stack
-                  direction='row'
-                  alignItems='center'
-                  justifyContent='space-between'
-                  spacing={2}
-                  py={1}>
-                  <Stack
-                    direction='row'
-                    alignItems='center'
-                    spacing={2}>
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  spacing={1}
+                  py={1}
+                >
+                  <IconButton
+                    size="small"
+                    color="inherit"
+                    onClick={() => onDelete(value.sku)}
+                  >
+                    <IoClose size={20} />
+                  </IconButton>
+                  <Stack direction="row" alignItems="center" spacing={2}>
                     {loading ? (
-                      <Skeleton
-                        variant='rounded'
-                        width={64}
-                        height={64}
-                      />
+                      <Skeleton variant="rounded" width={64} height={64} />
                     ) : (
                       <Box
                         sx={{
-                          position: 'relative',
+                          position: "relative",
                           height: 64,
                           width: 64,
-                          borderRadius: '8px',
-                          border: '1px solid rgba(145, 158, 171, 0.32)',
+                          borderRadius: "8px",
+                          border: "1px solid rgba(145, 158, 171, 0.32)",
                           img: {
-                            borderRadius: '8px',
-                            // border: "1px solid rgba(145, 158, 171, 0.32)",
+                            borderRadius: "8px",
                           },
-                        }}>
+                        }}
+                      >
                         <Image
                           priority
                           src={value.image}
-                          alt='product'
-                          layout='fill'
-                          objectFit='cover'
+                          alt="produit"
+                          layout="fill"
+                          objectFit="cover"
                         />
                       </Box>
                     )}
                     <Box>
                       <Typography
-                        variant='subtitle1'
+                        variant="subtitle1"
                         noWrap
                         sx={{
                           width: 150,
-                        }}>
+                        }}
+                      >
                         {loading ? (
-                          <Skeleton
-                            variant='text'
-                            width={160}
-                          />
+                          <Skeleton variant="text" width={160} />
                         ) : (
                           value.name
                         )}
                       </Typography>
                       <Typography
-                        variant='body2'
+                        variant="body2"
                         sx={{
+                          color: "text.secondary",
                           span: {
-                            color: 'text.secondary',
+                            color: "text.primary",
+                            textTransform: "capitalize",
+                            fontWeight: 700,
                           },
-                        }}>
+                        }}
+                      >
                         {loading ? (
-                          <Skeleton
-                            variant='text'
-                            width={120}
-                          />
+                          <Skeleton variant="text" width={120} />
                         ) : (
                           <>
-                            <b>Variant:</b> <span>{value.variantName}</span>
+                            Variante : <span>{value.variantName}</span>
                           </>
                         )}
                       </Typography>
                       <Typography
-                        variant='body2'
+                        variant="body2"
                         sx={{
+                          color: "text.secondary",
                           span: {
-                            color: 'text.secondary',
+                            color: "text.primary",
+                            textTransform: "capitalize",
+                            fontWeight: 700,
                           },
-                        }}>
+                        }}
+                      >
                         {loading ? (
-                          <Skeleton
-                            variant='text'
-                            width={120}
-                          />
+                          <Skeleton variant="text" width={120} />
                         ) : (
                           <>
-                            <b>Quantity:</b> <span>{value.quantity}</span>
+                            Quantité : <span>{value.quantity}</span>
                           </>
                         )}
                       </Typography>
                     </Box>
                   </Stack>
-                  <Stack
-                    justifyContent='end'
-                    alignItems='end'>
-                    <Typography variant='subtitle1'>
+                  <Stack justifyContent="end" alignItems="end">
+                    <Typography variant="subtitle1">
                       {loading ? (
-                        <Skeleton
-                          variant='text'
-                          width={60}
-                        />
+                        <Skeleton variant="text" width={60} />
                       ) : (
-                        <>
-                          {fCurrency(cCurrency(value.price * value.quantity))}
-                        </>
+                        <>{fCurrency(value.price * value.quantity)}</>
                       )}
                     </Typography>
-                    <Box>
-                      <IconButton
-                        size='small'
-                        color='error'
-                        onClick={() => onDelete(value.sku)}>
-                        <MdDeleteOutline size={20} />
-                      </IconButton>
-                    </Box>
                   </Stack>
                 </Stack>
                 {index !== array.length - 1 && <Divider />}
@@ -164,6 +147,7 @@ export default function CheckoutCard({ ...props }) {
     </Card>
   );
 }
+
 CheckoutCard.propTypes = {
   cart: PropTypes.arrayOf(
     PropTypes.shape({

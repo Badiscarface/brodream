@@ -35,7 +35,7 @@
     },
     {
       "name": "Cart",
-      "href": "/cart"
+      "href": "/order"
     },
     {
       "name": "User",

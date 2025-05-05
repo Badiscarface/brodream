@@ -1,9 +1,10 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import NextLink from 'next/link';
-import { last } from 'lodash';
+import React from "react";
+import PropTypes from "prop-types";
+import NextLink from "next/link";
+import { last } from "lodash";
 // mui
-import { Typography, Box, Link, Breadcrumbs } from '@mui/material';
+import { Typography, Box, Link, Breadcrumbs } from "@mui/material";
+import { IoChevronForwardOutline } from "react-icons/io5";
 
 function LinkItem({ link, admin }) {
   const { href, name, icon } = link;
@@ -13,24 +14,27 @@ function LinkItem({ link, admin }) {
       key={name}
       href={href}
       passHref
-      variant={admin ? 'subtitle1' : 'subtitle1'}
+      variant={admin ? "subtitle2" : "subtitle2"}
       sx={{
         lineHeight: 2,
-        display: 'flex',
-        alignItems: 'center',
-        color: admin ? 'text.primary' : 'common.white',
-        '& > div': { display: 'inherit' },
-      }}>
+        display: "flex",
+        fontWeight: 500,
+        alignItems: "center",
+        color: admin ? "text.secondary" : "text.secondary",
+        "& > div": { display: "inherit" },
+      }}
+    >
       {icon && (
         <Box
           sx={{
             mr: 1,
-            '& svg': {
+            "& svg": {
               width: admin ? 30 : 20,
               height: admin ? 30 : 20,
-              color: admin ? 'text.primary' : 'common.white',
+              color: admin ? "text.secondary" : "text.secondary",
             },
-          }}>
+          }}
+        >
           {icon}
         </Box>
       )}
@@ -52,29 +56,23 @@ function MBreadcrumbs({ links, admin, activeLast = false, ...other }) {
   const currentLink = last(links)?.name;
 
   const listDefault = links.map((link) => (
-    <LinkItem
-      key={Math.random()}
-      link={link}
-      admin={admin}
-    />
+    <LinkItem key={Math.random()} link={link} admin={admin} />
   ));
   const listActiveLast = links.map((link) => (
     <div key={Math.random()}>
       {link.name !== currentLink ? (
-        <LinkItem
-          link={link}
-          admin={admin}
-        />
+        <LinkItem link={link} admin={admin} />
       ) : (
         <Typography
-          variant={admin ? 'subtitle1' : 'subtitle1'}
+          variant={admin ? "subtitle2" : "subtitle2"}
           sx={{
             maxWidth: 260,
-            overflow: 'hidden',
-            whiteSpace: 'nowrap',
-            color: admin ? 'text.disabled' : 'common.white',
-            textOverflow: 'ellipsis',
-          }}>
+            overflow: "hidden",
+            whiteSpace: "nowrap",
+            color: admin ? "text.disabled" : "text.secondary",
+            textOverflow: "ellipsis",
+          }}
+        >
           {currentLink}
         </Typography>
       )}
@@ -83,8 +81,16 @@ function MBreadcrumbs({ links, admin, activeLast = false, ...other }) {
 
   return (
     <Breadcrumbs
-      separator='›'
-      {...other}>
+      separator={
+        <Box
+          component={IoChevronForwardOutline}
+          sx={{
+            color: "text.secondary",
+          }}
+        />
+      }
+      {...other}
+    >
       {activeLast ? listDefault : listActiveLast}
     </Breadcrumbs>
   );

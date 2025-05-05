@@ -1,7 +1,7 @@
-import Image from '@/components/blurImage';
-import PropTypes from 'prop-types';
+import Image from "@/components/blurImage";
+import PropTypes from "prop-types";
 // icons
-import { MdVerified } from 'react-icons/md';
+import { MdVerified } from "react-icons/md";
 // mui
 import {
   Box,
@@ -12,10 +12,10 @@ import {
   Grid,
   Avatar,
   Stack,
-} from '@mui/material';
-import Rating from '@mui/material/Rating';
+} from "@mui/material";
+import Rating from "@mui/material/Rating";
 // utils
-import { fDate } from '@/utils/formatTime';
+import { fDate } from "@/utils/formatTime";
 // components
 
 ReviewItem.propTypes = {
@@ -52,25 +52,27 @@ ProductDetailsReviewList.propTypes = {
 function ReviewItem({ ...props }) {
   const { review, isLoading, reviewsCount, index } = props;
 
-  console.log(review, 'reviews');
+  console.log(review, "reviews");
   return (
     <Box pt={2}>
       <ListItem
         disableGutters
         sx={{
-          alignItems: 'flex-start',
+          alignItems: "flex-start",
           px: 2,
-          flexDirection: { xs: 'column', sm: 'row' },
-        }}>
+          flexDirection: { xs: "column", sm: "row" },
+        }}
+      >
         <Box
           sx={{
             mr: 1,
-            display: 'flex',
-            alignItems: 'center',
+            display: "flex",
+            alignItems: "center",
             mb: { xs: 2, sm: 0 },
-            textAlign: { sm: 'center' },
-            flexDirection: { sm: 'column' },
-          }}>
+            textAlign: { sm: "center" },
+            flexDirection: { sm: "column" },
+          }}
+        >
           {review.user?.cover?.url ? (
             <Box
               sx={{
@@ -78,16 +80,17 @@ function ReviewItem({ ...props }) {
                 mb: { sm: 2 },
                 width: 64,
                 height: 64,
-                position: 'relative',
+                position: "relative",
                 borderRadius: 50,
-                overflow: 'hidden',
-              }}>
+                overflow: "hidden",
+              }}
+            >
               <Image
                 src={review.user?.cover?.url}
-                alt={review.name + ' review'}
+                alt={review.name + " review"}
                 priority
-                layout='fill'
-                objectFit='cover'
+                layout="fill"
+                objectFit="cover"
               />
             </Box>
           ) : (
@@ -98,60 +101,57 @@ function ReviewItem({ ...props }) {
         </Box>
 
         <Box width={1}>
-          <Box sx={{ float: 'right' }}>
+          <Box sx={{ float: "right" }}>
             {review?.isPurchased && (
               <Typography
-                variant='caption'
+                variant="caption"
                 sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  color: 'primary.main',
-                }}>
+                  display: "flex",
+                  alignItems: "center",
+                  color: "primary.main",
+                }}
+              >
                 <MdVerified size={16} />
                 &nbsp;Verified Purchase
               </Typography>
             )}
             <Stack spacing={2}>
               <Typography
-                variant='caption'
-                sx={{ color: 'text.secondary', float: 'right' }}
-                noWrap>
+                variant="caption"
+                sx={{ color: "text.secondary", float: "right" }}
+                noWrap
+              >
                 {fDate(review.createdAt)}
               </Typography>
               <Typography
-                component={'div'}
-                variant='caption'
-                sx={{ color: 'text.secondary', float: 'right' }}
-                noWrap>
+                component={"div"}
+                variant="caption"
+                sx={{ color: "text.secondary", float: "right" }}
+                noWrap
+              >
                 {review.location}
               </Typography>
             </Stack>
           </Box>
-          <Rating
-            size='small'
-            value={review.rating}
-            precision={0.1}
-            readOnly
-          />
+          <Rating size="small" value={review.rating} precision={0.1} readOnly />
           <Typography
-            variant='subtitle1'
+            variant="subtitle1"
             noWrap
             mb={0.5}
-            sx={{ textTransform: 'capitalize' }}>
-            {review.name}{' '}
+            sx={{ textTransform: "capitalize" }}
+          >
+            {review.name}{" "}
             <Typography
-              variant='subtitle2'
-              component={'span'}
+              variant="subtitle2"
+              component={"span"}
               noWrap
               mb={0.5}
-              sx={{ textTransform: 'capitalize' }}>
+              sx={{ textTransform: "capitalize" }}
+            >
               ({review.headlines})
             </Typography>
           </Typography>
-          <Typography
-            variant='subtitle2'
-            mb={1}
-            fontWeight={400}>
+          <Typography variant="subtitle2" mb={1} fontWeight={400}>
             {review.message}
           </Typography>
         </Box>
@@ -159,28 +159,29 @@ function ReviewItem({ ...props }) {
       {!isLoading && Boolean(review.images.length) ? (
         <>
           <Box p={3}>
-            <Grid
-              container
-              spacing={2}
-              sx={{ img: { borderRadius: '8px' } }}>
+            <Grid container spacing={2} sx={{ img: { borderRadius: "8px" } }}>
               {review.images.map((image: ImageProp) => (
                 <Grid
                   item
-                  xs={6}
-                  md={3}
-                  lg={2}
-                  key={Math.random()}>
+                  size={{
+                    lg: 2,
+                    md: 3,
+                    xs: 6,
+                  }}
+                  key={Math.random()}
+                >
                   <Box
                     sx={{
-                      position: 'relative',
+                      position: "relative",
                       height: 100,
-                    }}>
-                    {' '}
+                    }}
+                  >
+                    {" "}
                     <Image
                       src={image.url}
                       alt={review.name + "'s review"}
-                      layout='fill'
-                      objectFit='cover'
+                      layout="fill"
+                      objectFit="cover"
                     />
                   </Box>
                 </Grid>

@@ -1,42 +1,37 @@
-'use client';
-import React from 'react';
+"use client";
+import React from "react";
 // mui
 import {
   Box,
   Container,
-  Grid2,
+  Grid,
   Stack,
   Typography,
   useTheme,
-} from '@mui/material';
+} from "@mui/material";
 // components
-import BlogCard from '../cards/blogCard';
+import BlogCard from "../cards/blogCard";
 
 export default function MainBlogs({ ...props }) {
   const { data } = props;
   const theme = useTheme();
-  console.log(data, 'data');
+  console.log(data, "data");
   return (
     <Box>
-      <Stack
-        my={4}
-        spacing={2}
-        textAlign='center'>
-        <Typography variant='h3'>
+      <Stack my={4} spacing={2} textAlign="center">
+        <Typography variant="h3">
           Tendances, conseils & astuces pour personnaliser un vêtement
         </Typography>
-        <Typography variant='body1'>
+        <Typography variant="body1">
           La personnalisation de vêtements avec de la broderie ou de
           l&apos;impression numérique vous intéresse-t-il ?<br /> On vous dit
           tout sur le sujet. Découvrez nos conseils et astuces pour créer un
           vêtement personnalisé à votre image.
         </Typography>
       </Stack>
-      <Container>
-        <Grid2
-          container
-          spacing={2}>
-          <Grid2 size={{ xs: 12, md: 8 }}>
+      <Container maxWidth="xl">
+        <Grid container spacing={2}>
+          <Grid size={{ xs: 12, md: 8 }}>
             <Stack spacing={2}>
               {data?.data.map(
                 (items: {
@@ -46,23 +41,20 @@ export default function MainBlogs({ ...props }) {
                     url: string;
                   };
                 }) => (
-                  <BlogCard
-                    key={Math.random()}
-                    item={items}
-                  />
+                  <BlogCard key={Math.random()} item={items} />
                 )
               )}
             </Stack>
-          </Grid2>
-          <Grid2 size={{ xs: 12, md: 4 }}>
+          </Grid>
+          <Grid size={{ xs: 12, md: 4 }}>
             <Box
               sx={{
-                borderLeft: '1px solid' + theme.palette.divider,
-                height: '100%',
+                borderLeft: "1px solid" + theme.palette.divider,
+                height: "100%",
               }}
             />
-          </Grid2>
-        </Grid2>
+          </Grid>
+        </Grid>
       </Container>
     </Box>
   );
