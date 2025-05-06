@@ -31,7 +31,7 @@ export default function MainBlogs({ ...props }) {
       </Stack>
       <Container maxWidth="xl">
         <Grid container spacing={2}>
-          <Grid size={{ xs: 12, md: 4 }}>
+          <Grid size={{ xs: 12, md: 4 }} justifyContent={"space-arround"}>
             <Stack spacing={2}>
               {data?.data.map(
                 (items: {
