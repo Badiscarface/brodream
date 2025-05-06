@@ -31,7 +31,7 @@ export default function MainBlogs({ ...props }) {
       </Stack>
       <Container maxWidth="xl">
         <Grid container spacing={2}>
-          <Grid size={{ xs: 12, md: 8 }}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <Stack spacing={2}>
               {data?.data.map(
                 (items: {
@@ -45,14 +45,6 @@ export default function MainBlogs({ ...props }) {
                 )
               )}
             </Stack>
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <Box
-              sx={{
-                borderLeft: "1px solid" + theme.palette.divider,
-                height: "100%",
-              }}
-            />
           </Grid>
         </Grid>
       </Container>

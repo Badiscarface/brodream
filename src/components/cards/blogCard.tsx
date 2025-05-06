@@ -6,7 +6,7 @@ import {
   Card,
   CardActionArea,
   CardContent,
-  Grid,
+  Button,
   Stack,
   Typography,
   useTheme,
@@ -16,7 +16,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next-nprogress-bar";
 import { fDateShortMth } from "@/utils/formatTime";
-
+import Label from "@/components/label";
 export default function BlogCard({ ...props }) {
   const { item } = props;
   const theme = useTheme();
@@ -24,101 +24,87 @@ export default function BlogCard({ ...props }) {
   return (
     <Card
       sx={{
-        overflow: "unset",
+        transition: "ease-in-out .5s",
         ":hover": {
-          ".datePicker": {
-            bgcolor: theme.palette.primary.main,
-            color: theme.palette.common.white,
-          },
+          borderColor: (theme) => theme.palette.primary.main + "!important",
         },
       }}
     >
-      <Box
-        className="datePicker"
-        sx={{
-          position: "absolute",
-          top: 20,
-          left: -10,
-          height: 30,
-          width: 60,
-          bgcolor: theme.palette.common.white,
-          border: "1px solid" + theme.palette.primary.main,
-          borderRadius: 1,
-          zIndex: 99,
-          transition: "ease-in-out .3s",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
+      <Stack
+        // direction={{ xs: "column", md: "row" }}
+        // alignItems="center"
+        spacing={2}
+        sx={{ p: 1 }}
       >
-        <Typography variant="subtitle2" textAlign="center">
-          {fDateShortMth(new Date(item?.createdAt))}
-        </Typography>
-      </Box>
-      <Card
-        sx={{
-          border: "none !important",
-        }}
-      >
-        <Grid container alignContent="center" justifyContent="center">
-          <Grid size={{ xs: 12, md: 4 }}>
-            <CardActionArea onClick={() => router.push(`/blogs/${item.slug}`)}>
-              <Box
-                sx={{
-                  position: "relative",
-                  overflow: "hidden",
-                  width: "100%",
-                  img: {
-                    objectFit: "cover",
-                  },
-                  "&:after": {
-                    content: `""`,
-                    display: "block",
-                    paddingBottom: "100%",
-                  },
-                }}
-              >
-                <Image src={item.cover.url} alt="Blog Img" fill priority />
-              </Box>
-            </CardActionArea>
-          </Grid>
-          <Grid size={{ xs: 12, md: 8 }}>
-            <CardContent
+        <Box
+          sx={{
+            position: "relative",
+            height: 210,
+            width: { xs: "100%" },
+
+            img: {
+              objectFit: "cover",
+              borderRadius: "8px 8px 0 0",
+            },
+          }}
+        >
+          <Image src={item.cover.url} alt={item.title} fill priority />
+        </Box>
+        <CardContent
+          sx={{
+            p: 1.5,
+            pb: "16px !important",
+          }}
+        >
+          <Stack spacing={1} justifyContent="center">
+            <Typography
+              variant="h6"
+              color="text.primary"
               sx={{
-                height: "100%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
+                lineHeight: 1.4,
+                "&:hover": {
+                  color: "primary.main",
+                },
               }}
+              component={Link}
+              href={`/blogs/${item.slug}`}
             >
-              <Stack spacing={2}>
-                <Typography
-                  variant="h5"
-                  component={Link}
-                  href={`/blogs/${item.slug}`}
-                  color="text.primary"
-                  sx={{
-                    transition: "ease-in-out .3s",
-                    ":hover": {
-                      color: (theme) =>
-                        theme.palette.primary.light + "!important",
-                    },
-                  }}
-                >
-                  {item.title}
-                </Typography>
-                <Typography
-                  variant="body1"
-                  color="text.secondary"
-                  dangerouslySetInnerHTML={{
-                    __html: `${item.description.slice(0, 200)}`,
-                  }}
-                />
-              </Stack>
-            </CardContent>
-          </Grid>
-        </Grid>
-      </Card>
+              {item.title}
+            </Typography>
+            <Stack
+              gap={1}
+              justifyContent={"space-between"}
+              direction="row"
+              alignItems={"center"}
+            >
+              <Typography
+                variant="subtitle2"
+                color="primary.main"
+                fontWeight={500}
+              >
+                {fDateShortMth(item.createdAt)}
+              </Typography>
+              <Label color="success">{item.category}</Label>
+            </Stack>
+            <Typography
+              variant="subtitle2"
+              color="text.secondary"
+              fontWeight={400}
+            >
+              {item.shortDescription}
+            </Typography>
+            <Box>
+              <Button
+                variant="contained"
+                onClick={() => router.push(`/blogs/${item.slug}`)}
+                color="primary"
+              >
+                Read full blog
+              </Button>
+            </Box>
+          </Stack>
+        </CardContent>
+      </Stack>
     </Card>
   );
 }
