@@ -13,9 +13,6 @@
 # testing
 /coverage
 
-# env
-.env.development
-.env.production
 
 # next.js
 /.next/
