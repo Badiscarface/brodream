@@ -4,13 +4,13 @@ import * as api from "@/services";
 import HeaderBreadcrumbs from "@/components/headerBreadcrumbs";
 import { Container } from "@mui/material";
 import ProductDetailMain from "@/components/product";
+// import config from '@/components/dialog/config.json';
 
 type Props = {
-  params: { slug: string }; // Correction ici
+  params: Promise<{ slug: string }>;
 };
 
 export const revalidate = 10;
-
 export async function generateStaticParams() {
   const { data } = await api.getProductSlugs();
 
@@ -22,9 +22,9 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string }; // Correction ici
+  params: Promise<{ slug: string }>;
 }) {
-  const slug = params.slug; // Correction ici
+  const slug = (await params).slug;
 
   const { data: response } = await api.getProductBySlug(slug);
   const images = response.images;
@@ -39,7 +39,7 @@ export async function generateMetadata({
 }
 
 export default async function ProductDetail({ params }: Props) {
-  const slug = params.slug; // Correction ici
+  const slug = (await params).slug;
   const res = await api.getProductBySlug(slug);
   const { data, totalRating, totalReviews, category } = res;
   const reviews = await api.getReviewsBySlug(data.id);
